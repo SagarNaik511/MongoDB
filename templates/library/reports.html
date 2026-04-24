@@ -1,0 +1,296 @@
+{% extends 'library/base.html' %}
+{% load static %}
+
+{% block title %}Reports{% endblock %}
+{% block breadcrumb %}Reports{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+  <div>
+    <h1 class="page-title">📈 Reports & Analytics</h1>
+    <p class="page-subtitle">Library statistics and performance overview</p>
+  </div>
+  <div class="btn-group">
+    <button onclick="window.print()" class="btn btn-secondary">🖨️ Print Report</button>
+  </div>
+</div>
+
+<!-- ── Total Fine Banner ────────────────────────────────────── -->
+<div class="card" style="
+  background: linear-gradient(135deg, #0f1724 0%, #1a2740 100%);
+  border-color: rgba(245,200,66,0.25);
+  margin-bottom: 24px;">
+  <div class="card-body" style="
+    display:flex; align-items:center;
+    justify-content:space-between; flex-wrap:wrap; gap:16px;">
+    <div>
+      <div style="font-size:0.75rem; text-transform:uppercase;
+                  letter-spacing:0.1em; color:rgba(200,211,232,0.5);
+                  margin-bottom:4px;">
+        Total Fine Collected
+      </div>
+      <div style="font-family:var(--font-display); font-size:2.8rem;
+                  color:var(--accent-gold); font-weight:700; line-height:1;">
+        ₹{{ total_fine }}
+      </div>
+    </div>
+    <div style="color:rgba(200,211,232,0.4); font-size:3rem;">💰</div>
+  </div>
+</div>
+
+<!-- ── Charts Row ───────────────────────────────────────────── -->
+<div class="reports-grid" style="margin-bottom:24px;">
+
+  <!-- Monthly Bar Chart -->
+  <div class="card fade-in">
+    <div class="card-header">
+      <span class="card-title">📊 Monthly Issue vs Return</span>
+      <span style="font-size:0.75rem; color:var(--text-muted);">Last 6 months</span>
+    </div>
+    <div class="card-body">
+      <div class="chart-wrapper" style="height:260px;">
+        <canvas id="monthlyReportChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Category Chart -->
+  <div class="card fade-in">
+    <div class="card-header">
+      <span class="card-title">📂 Issues by Category</span>
+    </div>
+    <div class="card-body">
+      <div class="chart-wrapper" style="height:260px;">
+        <canvas id="categoryReportChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── Bottom Data Panels ────────────────────────────────────── -->
+<div class="reports-grid">
+
+  <!-- Top Issued Books -->
+  <div class="card fade-in">
+    <div class="card-header">
+      <span class="card-title">🏆 Top Issued Books</span>
+      <span style="font-size:0.75rem; color:var(--text-muted);">All time</span>
+    </div>
+    <div class="card-body" style="padding:8px 20px;">
+      {% if top_books %}
+        {% for book in top_books %}
+        <div class="rank-item">
+          <div class="rank-number {% if forloop.counter == 1 %}top{% endif %}">
+            {% if forloop.counter == 1 %}🥇
+            {% elif forloop.counter == 2 %}🥈
+            {% elif forloop.counter == 3 %}🥉
+            {% else %}{{ forloop.counter }}{% endif %}
+          </div>
+          <div class="rank-info">
+            <div class="rank-title">{{ book.title }}</div>
+            <div class="rank-sub">{{ book.author }}</div>
+            <div class="progress-bar-wrap" style="margin-top:6px;">
+              <div class="progress-bar-fill"
+                   style="width:{{ book.count|default:0 }}0%">
+              </div>
+            </div>
+          </div>
+          <div class="rank-count">{{ book.count }}×</div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <div class="empty-state" style="padding:30px;">
+          <p>No issue data yet.</p>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Most Active Students -->
+  <div class="card fade-in">
+    <div class="card-header">
+      <span class="card-title">🎓 Most Active Students</span>
+    </div>
+    <div class="card-body" style="padding:8px 20px;">
+      {% if active_students %}
+        {% for student in active_students %}
+        <div class="rank-item">
+          <div style="
+            width:32px; height:32px; border-radius:50%;
+            background:linear-gradient(135deg,#0f1724,#2563eb);
+            display:flex; align-items:center; justify-content:center;
+            font-size:0.8rem; font-weight:700; color:white; flex-shrink:0;">
+            {{ student.name|first|upper }}
+          </div>
+          <div class="rank-info">
+            <div class="rank-title">{{ student.name }}</div>
+            <div class="rank-sub">
+              {{ student.student_id }} · {{ student.department }}
+            </div>
+          </div>
+          <div class="rank-count">{{ student.count }}×</div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <div class="empty-state" style="padding:30px;">
+          <p>No student data yet.</p>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+</div>
+
+<!-- ── Fine Records Table ────────────────────────────────────── -->
+{% if fine_issues %}
+<div class="card fade-in" style="margin-top:24px;">
+  <div class="card-header">
+    <span class="card-title">💸 Fine Records</span>
+    <span style="font-size:0.75rem; color:var(--text-muted);">
+      Highest fines first
+    </span>
+  </div>
+  <div class="table-wrapper" style="border:none; border-radius:0;">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Student</th>
+          <th>Book</th>
+          <th>Issued</th>
+          <th>Due Date</th>
+          <th>Returned</th>
+          <th>Fine Amount</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for fi in fine_issues %}
+        <tr>
+          <td class="td-muted">{{ forloop.counter }}</td>
+          <td>
+            <div class="td-bold">{{ fi.student_name }}</div>
+            <div class="td-muted" style="font-size:0.75rem;">{{ fi.student_code }}</div>
+          </td>
+          <td class="td-bold">{{ fi.book_title }}</td>
+          <td class="td-muted">{{ fi.issue_date|date:"d M Y" }}</td>
+          <td class="td-mono">{{ fi.due_date|date:"d M Y" }}</td>
+          <td class="td-muted">
+            {% if fi.return_date %}{{ fi.return_date|date:"d M Y" }}
+            {% else %}—{% endif %}
+          </td>
+          <td>
+            <span style="
+              font-family:var(--font-mono); font-weight:700;
+              font-size:1rem; color:var(--accent-red);">
+              ₹{{ fi.fine }}
+            </span>
+          </td>
+          <td>
+            {% if fi.status == 'returned' %}
+              <span class="badge badge-green">Returned</span>
+            {% else %}
+              <span class="badge badge-red">Active</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endif %}
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const monthlyStats  = {{ monthly_stats|safe }};
+const categoryStats = {{ category_stats|safe }};
+const COLORS = ['#f5c842','#2563eb','#16a34a','#dc2626','#0891b2','#ea580c','#8b5cf6'];
+
+// ── Monthly Grouped Bar Chart ─────────────────────────────────
+const mCtx = document.getElementById('monthlyReportChart').getContext('2d');
+new Chart(mCtx, {
+  type: 'bar',
+  data: {
+    labels: monthlyStats.map(d => d.month),
+    datasets: [
+      {
+        label: 'Issued',
+        data: monthlyStats.map(d => d.issued),
+        backgroundColor: 'rgba(245,200,66,0.8)',
+        borderColor: '#f5c842',
+        borderWidth: 2,
+        borderRadius: 5,
+      },
+      {
+        label: 'Returned',
+        data: monthlyStats.map(d => d.returned),
+        backgroundColor: 'rgba(22,163,74,0.7)',
+        borderColor: '#16a34a',
+        borderWidth: 2,
+        borderRadius: 5,
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        labels: { color: '#9898aa', usePointStyle: true, font: { size: 11 } }
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: { stepSize: 1, color: '#9898aa', font: { size: 11 } },
+        grid: { color: 'rgba(150,150,170,0.1)' }
+      },
+      x: {
+        ticks: { color: '#9898aa', font: { size: 11 } },
+        grid: { display: false }
+      }
+    }
+  }
+});
+
+// ── Category Horizontal Bar Chart ─────────────────────────────
+const cCtx = document.getElementById('categoryReportChart').getContext('2d');
+new Chart(cCtx, {
+  type: 'bar',
+  data: {
+    labels: categoryStats.map(d => d.category || 'Uncategorized'),
+    datasets: [{
+      label: 'Total Issues',
+      data: categoryStats.map(d => d.count),
+      backgroundColor: COLORS,
+      borderRadius: 6,
+      borderWidth: 0,
+    }]
+  },
+  options: {
+    indexAxis: 'y',       // horizontal bar
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false }
+    },
+    scales: {
+      x: {
+        beginAtZero: true,
+        ticks: { stepSize: 1, color: '#9898aa', font: { size: 11 } },
+        grid: { color: 'rgba(150,150,170,0.1)' }
+      },
+      y: {
+        ticks: { color: '#9898aa', font: { size: 11 } },
+        grid: { display: false }
+      }
+    }
+  }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,159 @@
+{% extends 'library/base.html' %}
+
+{% block title %}{{ action }} Book{% endblock %}
+{% block breadcrumb %}
+  <a href="{% url 'books_list' %}" style="color:var(--text-muted);">Books</a>
+  › {{ action }} Book
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+  <div>
+    <h1 class="page-title">
+      {% if action == 'Add' %}➕ Add New Book{% else %}✏️ Edit Book{% endif %}
+    </h1>
+    <p class="page-subtitle">
+      {% if action == 'Add' %}
+        Fill in the details to add a new book to the library.
+      {% else %}
+        Update the book information below.
+      {% endif %}
+    </p>
+  </div>
+  <a href="{% url 'books_list' %}" class="btn btn-secondary">← Back to Books</a>
+</div>
+
+<!-- ── Form Card ────────────────────────────────────────────── -->
+<div class="card" style="max-width: 860px;">
+  <div class="card-header">
+    <span class="card-title">📋 Book Information</span>
+    <span style="font-size:0.78rem; color:var(--text-muted);">
+      Fields marked * are required
+    </span>
+  </div>
+
+  <div class="card-body">
+    <form method="POST" action="">
+      {% csrf_token %}
+
+      <div class="form-grid">
+
+        <!-- Title -->
+        <div class="form-group full-width">
+          <label class="form-label">Book Title *</label>
+          <input type="text"
+                 name="title"
+                 class="form-control"
+                 value="{{ book.title|default:'' }}"
+                 placeholder="e.g. The Great Gatsby"
+                 required
+                 autofocus>
+        </div>
+
+        <!-- Author -->
+        <div class="form-group">
+          <label class="form-label">Author *</label>
+          <input type="text"
+                 name="author"
+                 class="form-control"
+                 value="{{ book.author|default:'' }}"
+                 placeholder="e.g. F. Scott Fitzgerald"
+                 required>
+        </div>
+
+        <!-- ISBN -->
+        <div class="form-group">
+          <label class="form-label">ISBN</label>
+          <input type="text"
+                 name="isbn"
+                 class="form-control"
+                 value="{{ book.isbn|default:'' }}"
+                 placeholder="e.g. 978-0-7432-7356-5">
+          <span class="form-hint">International Standard Book Number (optional)</span>
+        </div>
+
+        <!-- Category -->
+        <div class="form-group">
+          <label class="form-label">Category</label>
+          <select name="category" class="form-control">
+            <option value="">-- Select Category --</option>
+            {% for cat in all_categories %}
+              <option value="{{ cat }}"
+                {% if book.category == cat %}selected{% endif %}>
+                {{ cat }}
+              </option>
+            {% endfor %}
+            <!-- Allow typing a new category -->
+            <option value="Fiction"     {% if book.category == 'Fiction'     %}selected{% endif %}>Fiction</option>
+            <option value="Non-Fiction" {% if book.category == 'Non-Fiction' %}selected{% endif %}>Non-Fiction</option>
+            <option value="Technology"  {% if book.category == 'Technology'  %}selected{% endif %}>Technology</option>
+            <option value="Science"     {% if book.category == 'Science'     %}selected{% endif %}>Science</option>
+            <option value="History"     {% if book.category == 'History'     %}selected{% endif %}>History</option>
+            <option value="Biography"   {% if book.category == 'Biography'   %}selected{% endif %}>Biography</option>
+            <option value="Mathematics" {% if book.category == 'Mathematics' %}selected{% endif %}>Mathematics</option>
+            <option value="Philosophy"  {% if book.category == 'Philosophy'  %}selected{% endif %}>Philosophy</option>
+            <option value="Reference"   {% if book.category == 'Reference'   %}selected{% endif %}>Reference</option>
+          </select>
+        </div>
+
+        <!-- Publisher -->
+        <div class="form-group">
+          <label class="form-label">Publisher</label>
+          <input type="text"
+                 name="publisher"
+                 class="form-control"
+                 value="{{ book.publisher|default:'' }}"
+                 placeholder="e.g. Penguin Books">
+        </div>
+
+        <!-- Year -->
+        <div class="form-group">
+          <label class="form-label">Publication Year</label>
+          <input type="number"
+                 name="year"
+                 class="form-control"
+                 value="{{ book.year|default:'' }}"
+                 placeholder="e.g. 2023"
+                 min="1800"
+                 max="2030">
+        </div>
+
+        <!-- Total Copies -->
+        <div class="form-group">
+          <label class="form-label">Total Copies</label>
+          <input type="number"
+                 name="total_copies"
+                 class="form-control"
+                 value="{{ book.total_copies|default:'1' }}"
+                 min="1"
+                 max="100">
+          <span class="form-hint">Number of physical copies available</span>
+        </div>
+
+        <!-- Description -->
+        <div class="form-group full-width">
+          <label class="form-label">Description</label>
+          <textarea name="description"
+                    class="form-control"
+                    placeholder="Brief description of the book…"
+                    rows="3">{{ book.description|default:'' }}</textarea>
+        </div>
+
+      </div><!-- end form-grid -->
+
+      <!-- Actions -->
+      <div class="form-actions" style="margin-top:24px;">
+        <button type="submit" class="btn btn-primary btn-lg">
+          {% if action == 'Add' %}✅ Add Book{% else %}💾 Save Changes{% endif %}
+        </button>
+        <a href="{% url 'books_list' %}" class="btn btn-secondary btn-lg">
+          Cancel
+        </a>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+{% endblock %}

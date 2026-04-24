@@ -1,0 +1,245 @@
+{% extends 'library/base.html' %}
+{% load static %}
+
+{% block title %}Dashboard{% endblock %}
+{% block breadcrumb %}Dashboard{% endblock %}
+
+{% block content %}
+
+<!-- ── Page Header ──────────────────────────────────────────── -->
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Dashboard</h1>
+    <p class="page-subtitle">Library overview and live statistics</p>
+  </div>
+  <div class="btn-group">
+    <a href="{% url 'book_add' %}"    class="btn btn-secondary">+ Add Book</a>
+    <a href="{% url 'student_add' %}" class="btn btn-secondary">+ Add Student</a>
+    <a href="{% url 'issue_book' %}"  class="btn btn-primary">📤 Issue Book</a>
+  </div>
+</div>
+
+<!-- ── Stats Cards ──────────────────────────────────────────── -->
+<div class="stats-grid">
+
+  <div class="stat-card gold fade-in">
+    <div class="stat-icon gold">📚</div>
+    <div class="stat-body">
+      <div class="stat-number" data-count="{{ total_books }}">{{ total_books }}</div>
+      <div class="stat-label">Total Books</div>
+    </div>
+  </div>
+
+  <div class="stat-card blue fade-in">
+    <div class="stat-icon blue">🎓</div>
+    <div class="stat-body">
+      <div class="stat-number" data-count="{{ total_students }}">{{ total_students }}</div>
+      <div class="stat-label">Total Students</div>
+    </div>
+  </div>
+
+  <div class="stat-card teal fade-in">
+    <div class="stat-icon teal">🔄</div>
+    <div class="stat-body">
+      <div class="stat-number" data-count="{{ issued_books }}">{{ issued_books }}</div>
+      <div class="stat-label">Books Issued</div>
+    </div>
+  </div>
+
+  <div class="stat-card green fade-in">
+    <div class="stat-icon green">✅</div>
+    <div class="stat-body">
+      <div class="stat-number" data-count="{{ returned_books }}">{{ returned_books }}</div>
+      <div class="stat-label">Returned</div>
+    </div>
+  </div>
+
+  <div class="stat-card red fade-in">
+    <div class="stat-icon red">⚠️</div>
+    <div class="stat-body">
+      <div class="stat-number" data-count="{{ overdue }}">{{ overdue }}</div>
+      <div class="stat-label">Overdue</div>
+    </div>
+  </div>
+
+  <div class="stat-card orange fade-in">
+    <div class="stat-icon orange">💰</div>
+    <div class="stat-body">
+      <div class="stat-number" data-count="{{ pending_fines }}">{{ pending_fines }}</div>
+      <div class="stat-label">Pending Fines</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── Charts Row ───────────────────────────────────────────── -->
+<div class="dashboard-grid">
+
+  <!-- Monthly Issues Chart -->
+  <div class="card fade-in">
+    <div class="card-header">
+      <span class="card-title">📈 Monthly Issues</span>
+      <span style="font-size:0.75rem; color:var(--text-muted);">Last 6 months</span>
+    </div>
+    <div class="card-body">
+      <div class="chart-wrapper">
+        <canvas id="monthlyChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Category Pie Chart -->
+  <div class="card fade-in">
+    <div class="card-header">
+      <span class="card-title">📂 Books by Category</span>
+    </div>
+    <div class="card-body">
+      <div class="chart-wrapper">
+        <canvas id="categoryChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── Recent Issues Table ──────────────────────────────────── -->
+<div class="card fade-in">
+  <div class="card-header">
+    <span class="card-title">🕒 Recent Active Issues</span>
+    <a href="{% url 'issues_list' %}" class="btn btn-secondary btn-sm">View All</a>
+  </div>
+
+  {% if recent_issues %}
+  <div class="table-wrapper" style="border:none; border-radius:0;">
+    <table>
+      <thead>
+        <tr>
+          <th>Book</th>
+          <th>Student</th>
+          <th>Issued</th>
+          <th>Due Date</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for issue in recent_issues %}
+        <tr>
+          <td class="td-bold">{{ issue.book_title }}</td>
+          <td>
+            <div>{{ issue.student_name }}</div>
+          </td>
+          <td class="td-muted">
+            {{ issue.issue_date|date:"d M Y" }}
+          </td>
+          <td class="td-mono">
+            {{ issue.due_date|date:"d M Y" }}
+          </td>
+          <td>
+            {% if issue.days_info < 0 %}
+              <span class="badge badge-red">Overdue {{ issue.days_info|stringformat:"d"|slice:"1:" }}d</span>
+            {% elif issue.days_info == 0 %}
+              <span class="badge badge-yellow">Due Today</span>
+            {% else %}
+              <span class="badge badge-green">{{ issue.days_info }}d left</span>
+            {% endif %}
+          </td>
+          <td>
+            <a href="{% url 'return_book' issue.id %}"
+               class="btn btn-success btn-sm"
+               data-return-url="{% url 'return_book' issue.id %}"
+               data-book-name="{{ issue.book_title }}">
+              Return
+            </a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <div class="empty-state-icon">✅</div>
+    <h3>All Clear!</h3>
+    <p>No active issues right now.</p>
+    <a href="{% url 'issue_book' %}" class="btn btn-primary">Issue a Book</a>
+  </div>
+  {% endif %}
+
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// ── Monthly Issues Bar Chart ──────────────────────────────────
+const monthlyData = {{ monthly_data|safe }};
+
+const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
+new Chart(monthlyCtx, {
+  type: 'bar',
+  data: {
+    labels: monthlyData.map(d => d.month),
+    datasets: [{
+      label: 'Books Issued',
+      data: monthlyData.map(d => d.count),
+      backgroundColor: 'rgba(245, 200, 66, 0.75)',
+      borderColor: 'rgba(245, 200, 66, 1)',
+      borderWidth: 2,
+      borderRadius: 6,
+      borderSkipped: false,
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: { stepSize: 1, color: '#9898aa', font: { size: 11 } },
+        grid: { color: 'rgba(150,150,170,0.1)' }
+      },
+      x: {
+        ticks: { color: '#9898aa', font: { size: 11 } },
+        grid: { display: false }
+      }
+    }
+  }
+});
+
+// ── Category Doughnut Chart ───────────────────────────────────
+const categories = {{ categories|safe }};
+const COLORS = ['#f5c842','#2563eb','#16a34a','#0891b2','#ea580c','#dc2626'];
+
+const catCtx = document.getElementById('categoryChart').getContext('2d');
+new Chart(catCtx, {
+  type: 'doughnut',
+  data: {
+    labels: categories.map(c => c.label),
+    datasets: [{
+      data:            categories.map(c => c.count),
+      backgroundColor: COLORS,
+      borderWidth:     0,
+      hoverOffset: 8,
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'right',
+        labels: {
+          color: '#9898aa',
+          font: { size: 11 },
+          padding: 12,
+          usePointStyle: true,
+        }
+      }
+    },
+    cutout: '65%',
+  }
+});
+</script>
+{% endblock %}

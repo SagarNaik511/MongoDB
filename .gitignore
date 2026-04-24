@@ -1,0 +1,43 @@
+# ── Python ────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+.Python
+
+# ── Virtual Environment ───────────────────────────
+venv/
+env/
+.env/
+.venv/
+
+# ── Django ────────────────────────────────────────
+*.log
+db.sqlite3
+staticfiles/
+media/
+
+# ── Environment Variables ─────────────────────────
+.env
+.env.local
+.env.production
+*.env
+
+# ── VS Code ───────────────────────────────────────
+.vscode/
+*.code-workspace
+
+# ── OS Files ──────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── MongoDB ───────────────────────────────────────
+*.bson
+mongod.lock
+
+# ── Distribution / Packaging ──────────────────────
+dist/
+build/
+*.egg-info/

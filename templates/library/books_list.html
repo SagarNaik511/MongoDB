@@ -1,0 +1,161 @@
+{% extends 'library/base.html' %}
+
+{% block title %}Books{% endblock %}
+{% block breadcrumb %}Books{% endblock %}
+
+{% block content %}
+
+<!-- ── Page Header ─────────────────────────────────────────── -->
+<div class="page-header">
+  <div>
+    <h1 class="page-title">📖 Books</h1>
+    <p class="page-subtitle">
+      {{ total_books }} book{{ total_books|pluralize }} in the library
+    </p>
+  </div>
+  <a href="{% url 'book_add' %}" class="btn btn-primary">+ Add Book</a>
+</div>
+
+<!-- ── Search & Filter Bar ─────────────────────────────────── -->
+<form method="GET" action="{% url 'books_list' %}">
+  <div class="filter-bar">
+
+    <!-- Search box -->
+    <div class="search-bar" style="flex:1; min-width:220px;">
+      <span class="search-icon">🔍</span>
+      <input type="text"
+             name="search"
+             value="{{ search }}"
+             placeholder="Search by title, author, ISBN…"
+             data-live-search
+             autocomplete="off">
+    </div>
+
+    <!-- Category filter -->
+    <select name="category" class="filter-select" onchange="this.form.submit()">
+      <option value="">All Categories</option>
+      {% for cat in all_categories %}
+        <option value="{{ cat }}" {% if category == cat %}selected{% endif %}>
+          {{ cat }}
+        </option>
+      {% endfor %}
+    </select>
+
+    <!-- Sort -->
+    <select name="sort" class="filter-select" onchange="this.form.submit()">
+      <option value="title"  {% if sort_by == 'title'  %}selected{% endif %}>A → Z</option>
+      <option value="author" {% if sort_by == 'author' %}selected{% endif %}>By Author</option>
+      <option value="newest" {% if sort_by == 'newest' %}selected{% endif %}>Newest First</option>
+    </select>
+
+    <button type="submit" class="btn btn-secondary">Search</button>
+
+    {% if search or category %}
+      <a href="{% url 'books_list' %}" class="btn btn-secondary">✕ Clear</a>
+    {% endif %}
+  </div>
+</form>
+
+<!-- ── Books Grid ───────────────────────────────────────────── -->
+{% if books %}
+<div class="books-grid">
+  {% for book in books %}
+  <div class="book-card fade-in">
+
+    <!-- Cover -->
+    <div class="book-cover
+      {% if book.category == 'Fiction' %}cover-fiction
+      {% elif book.category == 'Technology' %}cover-technology
+      {% elif book.category == 'History' %}cover-history
+      {% elif book.category == 'Science' %}cover-science
+      {% else %}cover-default{% endif %}">
+
+      <span class="book-cover-initial">
+        {{ book.title|first|upper }}
+      </span>
+
+      {% if book.category %}
+        <span class="book-cover-label">{{ book.category }}</span>
+      {% endif %}
+
+      <span class="book-copies-badge">
+        {{ book.available_copies }}/{{ book.total_copies }}
+      </span>
+    </div>
+
+    <!-- Body -->
+    <div class="book-card-body">
+      <div class="book-title">{{ book.title }}</div>
+      <div class="book-author">by {{ book.author }}</div>
+
+      {% if book.available_copies == 0 %}
+        <span class="badge badge-red" style="margin-bottom:10px;">Not Available</span>
+      {% elif book.available_copies <= 1 %}
+        <span class="badge badge-yellow" style="margin-bottom:10px;">Last Copy</span>
+      {% else %}
+        <span class="badge badge-green" style="margin-bottom:10px;">Available</span>
+      {% endif %}
+
+      <!-- Actions -->
+      <div class="book-card-actions">
+        <a href="{% url 'book_detail' book.id %}"
+           class="btn btn-secondary btn-sm" style="flex:1; justify-content:center;">
+          View
+        </a>
+        <a href="{% url 'book_edit' book.id %}"
+           class="btn btn-secondary btn-sm">✏️</a>
+        <button class="btn btn-danger btn-sm"
+          data-delete-url="{% url 'book_delete' book.id %}"
+                data-delete-name="{{ book.title }}">🗑️</button>
+      </div>
+    </div>
+
+  </div>
+  {% endfor %}
+</div>
+
+<!-- ── Pagination ───────────────────────────────────────────── -->
+{% if total_pages > 1 %}
+<div class="pagination">
+  {% if page > 1 %}
+    <a href="?page={{ page|add:"-1" }}&search={{ search }}&category={{ category }}&sort={{ sort_by }}"
+       class="page-btn">‹</a>
+  {% else %}
+    <span class="page-btn disabled">‹</span>
+  {% endif %}
+
+  {% for p in pages_range %}
+    <a href="?page={{ p }}&search={{ search }}&category={{ category }}&sort={{ sort_by }}"
+       class="page-btn {% if p == page %}active{% endif %}">{{ p }}</a>
+  {% endfor %}
+
+  {% if page < total_pages %}
+    <a href="?page={{ page|add:"1" }}&search={{ search }}&category={{ category }}&sort={{ sort_by }}"
+       class="page-btn">›</a>
+  {% else %}
+    <span class="page-btn disabled">›</span>
+  {% endif %}
+</div>
+{% endif %}
+
+{% else %}
+<!-- Empty State -->
+<div class="empty-state">
+  <div class="empty-state-icon">📭</div>
+  <h3>No books found</h3>
+  <p>
+    {% if search or category %}
+      No results for your search. Try different keywords.
+    {% else %}
+      The library has no books yet.
+    {% endif %}
+  </p>
+  {% if search or category %}
+    <a href="{% url 'books_list' %}" class="btn btn-secondary">Clear Filters</a>
+  {% else %}
+    <a href="{% url 'book_add' %}" class="btn btn-primary">+ Add First Book</a>
+  {% endif %}
+</div>
+{% endif %}
+
+{% endblock %}

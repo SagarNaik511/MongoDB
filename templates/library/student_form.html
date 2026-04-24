@@ -1,0 +1,144 @@
+{% extends 'library/base.html' %}
+
+{% block title %}{{ action }} Student{% endblock %}
+{% block breadcrumb %}
+  <a href="{% url 'students_list' %}" style="color:var(--text-muted);">Students</a>
+  › {{ action }} Student
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+  <div>
+    <h1 class="page-title">
+      {% if action == 'Add' %}➕ Add New Student{% else %}✏️ Edit Student{% endif %}
+    </h1>
+    <p class="page-subtitle">
+      {% if action == 'Add' %}
+        Register a new student in the library system.
+      {% else %}
+        Update student information below.
+      {% endif %}
+    </p>
+  </div>
+  <a href="{% url 'students_list' %}" class="btn btn-secondary">← Back to Students</a>
+</div>
+
+<div class="card" style="max-width:860px;">
+  <div class="card-header">
+    <span class="card-title">🎓 Student Information</span>
+    <span style="font-size:0.78rem; color:var(--text-muted);">Fields marked * are required</span>
+  </div>
+
+  <div class="card-body">
+    <form method="POST" action="">
+      {% csrf_token %}
+
+      <div class="form-grid">
+
+        <!-- Student ID -->
+        <div class="form-group">
+          <label class="form-label">Student ID *</label>
+          <input type="text"
+                 name="student_id"
+                 class="form-control"
+                 value="{{ student.student_id|default:'' }}"
+                 placeholder="e.g. STU006"
+                 {% if action == 'Edit' %}readonly style="opacity:0.6; cursor:not-allowed;"{% endif %}
+                 required
+                 autofocus>
+          <span class="form-hint">Unique ID — cannot be changed after creation</span>
+        </div>
+
+        <!-- Full Name -->
+        <div class="form-group">
+          <label class="form-label">Full Name *</label>
+          <input type="text"
+                 name="name"
+                 class="form-control"
+                 value="{{ student.name|default:'' }}"
+                 placeholder="e.g. Arjun Sharma"
+                 required>
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input type="email"
+                 name="email"
+                 class="form-control"
+                 value="{{ student.email|default:'' }}"
+                 placeholder="e.g. arjun@college.edu">
+        </div>
+
+        <!-- Phone -->
+        <div class="form-group">
+          <label class="form-label">Phone Number</label>
+          <input type="tel"
+                 name="phone"
+                 class="form-control"
+                 value="{{ student.phone|default:'' }}"
+                 placeholder="e.g. 9876543210"
+                 maxlength="10">
+        </div>
+
+        <!-- Department -->
+        <div class="form-group">
+          <label class="form-label">Department</label>
+          <select name="department" class="form-control">
+            <option value="">-- Select Department --</option>
+            {% for dept in all_departments %}
+              <option value="{{ dept }}" {% if student.department == dept %}selected{% endif %}>
+                {{ dept }}
+              </option>
+            {% endfor %}
+            <option value="Computer Science" {% if student.department == 'Computer Science' %}selected{% endif %}>Computer Science</option>
+            <option value="Electronics"      {% if student.department == 'Electronics'      %}selected{% endif %}>Electronics</option>
+            <option value="Mechanical"       {% if student.department == 'Mechanical'       %}selected{% endif %}>Mechanical</option>
+            <option value="Civil"            {% if student.department == 'Civil'            %}selected{% endif %}>Civil</option>
+            <option value="Chemical"         {% if student.department == 'Chemical'         %}selected{% endif %}>Chemical</option>
+            <option value="Mathematics"      {% if student.department == 'Mathematics'      %}selected{% endif %}>Mathematics</option>
+            <option value="Physics"          {% if student.department == 'Physics'          %}selected{% endif %}>Physics</option>
+            <option value="MBA"              {% if student.department == 'MBA'              %}selected{% endif %}>MBA</option>
+          </select>
+        </div>
+
+        <!-- Year -->
+        <div class="form-group">
+          <label class="form-label">Academic Year</label>
+          <select name="year" class="form-control">
+            <option value="">-- Select Year --</option>
+            <option value="1st Year" {% if student.year == '1st Year' %}selected{% endif %}>1st Year</option>
+            <option value="2nd Year" {% if student.year == '2nd Year' %}selected{% endif %}>2nd Year</option>
+            <option value="3rd Year" {% if student.year == '3rd Year' %}selected{% endif %}>3rd Year</option>
+            <option value="4th Year" {% if student.year == '4th Year' %}selected{% endif %}>4th Year</option>
+            <option value="PG 1st"   {% if student.year == 'PG 1st'   %}selected{% endif %}>PG 1st Year</option>
+            <option value="PG 2nd"   {% if student.year == 'PG 2nd'   %}selected{% endif %}>PG 2nd Year</option>
+          </select>
+        </div>
+
+        <!-- Address -->
+        <div class="form-group full-width">
+          <label class="form-label">Address</label>
+          <textarea name="address"
+                    class="form-control"
+                    placeholder="City, State"
+                    rows="2">{{ student.address|default:'' }}</textarea>
+        </div>
+
+      </div><!-- end form-grid -->
+
+      <div class="form-actions" style="margin-top:24px;">
+        <button type="submit" class="btn btn-primary btn-lg">
+          {% if action == 'Add' %}✅ Register Student{% else %}💾 Save Changes{% endif %}
+        </button>
+        <a href="{% url 'students_list' %}" class="btn btn-secondary btn-lg">
+          Cancel
+        </a>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+{% endblock %}

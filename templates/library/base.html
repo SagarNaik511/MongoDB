@@ -1,0 +1,167 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Library MS{% endblock %} — LibraryOS</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<!-- ── Django Message Data (picked up by Toast JS) ──────────── -->
+{% if messages %}
+  {% for message in messages %}
+    <div data-toast="{{ message }}"
+         data-toast-type="{% if message.tags == 'error' %}error{% elif message.tags == 'warning' %}warning{% elif message.tags == 'success' %}success{% else %}info{% endif %}"
+         style="display:none"></div>
+  {% endfor %}
+{% endif %}
+
+<!-- ── Toast Container ───────────────────────────────────────── -->
+<div class="toast-container"></div>
+
+<!-- ── Sidebar Overlay (mobile) ─────────────────────────────── -->
+<div class="sidebar-overlay"></div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!--   APP WRAPPER                                               -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="app-wrapper">
+
+  <!-- ── SIDEBAR ────────────────────────────────────────────── -->
+  <aside class="sidebar" id="sidebar">
+
+    <!-- Logo -->
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon">📚</div>
+      <div class="sidebar-logo-text">
+        LibraryOS
+        <span>Management System</span>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="sidebar-nav">
+
+      <!-- Main -->
+      <div class="nav-section-label">Main</div>
+
+      <a href="{% url 'home' %}" class="nav-item">
+        <span class="nav-icon">🏠</span>
+        <span>Home</span>
+      </a>
+
+      <a href="{% url 'dashboard' %}" class="nav-item">
+        <span class="nav-icon">📊</span>
+        <span>Dashboard</span>
+      </a>
+
+      <!-- Library -->
+      <div class="nav-section-label">Library</div>
+
+      <a href="{% url 'books_list' %}" class="nav-item">
+        <span class="nav-icon">📖</span>
+        <span>Books</span>
+      </a>
+
+      <a href="{% url 'students_list' %}" class="nav-item">
+        <span class="nav-icon">🎓</span>
+        <span>Students</span>
+      </a>
+
+      <a href="{% url 'issues_list' %}" class="nav-item">
+        <span class="nav-icon">🔄</span>
+        <span>Issue / Return</span>
+      </a>
+
+      <a href="{% url 'issue_book' %}" class="nav-item">
+        <span class="nav-icon">➕</span>
+        <span>Issue a Book</span>
+      </a>
+
+      <!-- Reports -->
+      <div class="nav-section-label">Reports</div>
+
+      <a href="{% url 'reports' %}" class="nav-item">
+        <span class="nav-icon">📈</span>
+        <span>Reports</span>
+      </a>
+
+      <!-- Info -->
+      <div class="nav-section-label">Info</div>
+
+      <a href="{% url 'about' %}" class="nav-item">
+        <span class="nav-icon">ℹ️</span>
+        <span>About</span>
+      </a>
+
+      <a href="{% url 'contact' %}" class="nav-item">
+        <span class="nav-icon">✉️</span>
+        <span>Contact</span>
+      </a>
+
+    </nav>
+
+    <!-- Footer: Dark Mode Toggle -->
+    <div class="sidebar-footer">
+      <button class="dark-toggle-btn w-full">
+        <span class="theme-icon">🌙</span>
+        <span class="theme-label">Dark Mode</span>
+      </button>
+    </div>
+
+  </aside>
+  <!-- END SIDEBAR -->
+
+  <!-- ── MAIN CONTENT ───────────────────────────────────────── -->
+  <div class="main-content" id="mainContent">
+
+    <!-- Top Header -->
+    <header class="top-header">
+
+      <!-- Sidebar toggle -->
+      <button class="header-toggle" title="Toggle Sidebar">☰</button>
+
+      <!-- Breadcrumb -->
+      <div class="header-breadcrumb">
+        <span>LibraryOS</span>
+        <span>›</span>
+        <strong>{% block breadcrumb %}Page{% endblock %}</strong>
+      </div>
+
+      <!-- Right side -->
+      <div class="header-right">
+        <!-- Global quick search -->
+        <div class="header-search">
+          <span class="search-icon">🔍</span>
+          <input type="text" placeholder="Quick search..." id="globalSearch"
+                 autocomplete="off">
+        </div>
+        <!-- Date display -->
+        <span class="header-date"></span>
+      </div>
+
+    </header>
+    <!-- END Header -->
+
+    <!-- Page Content -->
+    <main class="page-content">
+      {% block content %}{% endblock %}
+    </main>
+
+  </div>
+  <!-- END MAIN CONTENT -->
+
+</div>
+<!-- END APP WRAPPER -->
+
+<!-- ── Scripts ───────────────────────────────────────────────── -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="{% static 'js/main.js' %}"></script>
+{% block extra_js %}{% endblock %}
+
+</body>
+</html>

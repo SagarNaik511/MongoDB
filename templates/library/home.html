@@ -1,0 +1,106 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LibraryOS — Smart Library Management</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+<div class="home-page">
+
+  <!-- ── Nav ────────────────────────────────────────────── -->
+  <nav class="home-nav">
+    <div class="home-logo">
+      <div class="home-logo-icon">📚</div>
+      <span class="home-logo-name">LibraryOS</span>
+    </div>
+
+    <div style="display:flex; gap:12px; align-items:center;">
+      <button class="dark-toggle-btn" style="background:rgba(255,255,255,0.08); border-color:rgba(255,255,255,0.15); color:rgba(200,211,232,0.8);">
+        <span class="theme-icon">🌙</span>
+        <span class="theme-label">Dark Mode</span>
+      </button>
+      <a href="{% url 'dashboard' %}" class="btn-home-primary" style="padding:10px 22px; font-size:0.85rem;">
+        Go to Dashboard →
+      </a>
+    </div>
+  </nav>
+
+  <!-- ── Hero ───────────────────────────────────────────── -->
+  <section class="home-hero">
+
+    <div class="home-hero-tag">
+      📚 College Library Management System
+    </div>
+
+    <h1>
+      Manage Your Library<br>
+      with <em>Intelligence</em>
+    </h1>
+
+    <p>
+      A complete digital library system built with Django and MongoDB.
+      Track books, manage students, issue and return books — all in one place.
+    </p>
+
+    <div class="home-cta-group">
+      <a href="{% url 'dashboard' %}" class="btn-home-primary">
+        📊 Open Dashboard
+      </a>
+      <a href="{% url 'books_list' %}" class="btn-home-secondary">
+        📖 Browse Books
+      </a>
+    </div>
+
+  </section>
+
+  <!-- ── Features ────────────────────────────────────────── -->
+  <section class="home-features">
+
+    <div class="feature-card">
+      <div class="feature-card-icon">📖</div>
+      <h3>Books Management</h3>
+      <p>Add, edit, search books. Track available copies, categories, and authors.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-card-icon">🎓</div>
+      <h3>Student Records</h3>
+      <p>Manage student profiles with department, year, and full issue history.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-card-icon">🔄</div>
+      <h3>Issue & Return</h3>
+      <p>Issue books with due dates. Auto-calculate fines on late returns.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-card-icon">📈</div>
+      <h3>Reports & Analytics</h3>
+      <p>Top books, fine reports, monthly stats, and activity graphs.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-card-icon">🗄️</div>
+      <h3>MongoDB Backend</h3>
+      <p>Powered by raw PyMongo with indexes, regex search, aggregations.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-card-icon">🌙</div>
+      <h3>Dark Mode</h3>
+      <p>Fully responsive with dark mode support across all pages.</p>
+    </div>
+
+  </section>
+
+</div>
+
+<script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>

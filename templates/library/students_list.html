@@ -1,0 +1,168 @@
+{% extends 'library/base.html' %}
+
+{% block title %}Students{% endblock %}
+{% block breadcrumb %}Students{% endblock %}
+
+{% block content %}
+
+<!-- ── Page Header ─────────────────────────────────────────── -->
+<div class="page-header">
+  <div>
+    <h1 class="page-title">🎓 Students</h1>
+    <p class="page-subtitle">
+      {{ total_students }} student{{ total_students|pluralize }} registered
+    </p>
+  </div>
+  <a href="{% url 'student_add' %}" class="btn btn-primary">+ Add Student</a>
+</div>
+
+<!-- ── Search & Filter ─────────────────────────────────────── -->
+<form method="GET" action="{% url 'students_list' %}">
+  <div class="filter-bar">
+
+    <div class="search-bar" style="flex:1; min-width:220px;">
+      <span class="search-icon">🔍</span>
+      <input type="text"
+             name="search"
+             value="{{ search }}"
+             placeholder="Search by name, student ID, email…"
+             data-live-search
+             autocomplete="off">
+    </div>
+
+    <select name="department" class="filter-select" onchange="this.form.submit()">
+      <option value="">All Departments</option>
+      {% for dept in all_departments %}
+        <option value="{{ dept }}" {% if department == dept %}selected{% endif %}>
+          {{ dept }}
+        </option>
+      {% endfor %}
+    </select>
+
+    <button type="submit" class="btn btn-secondary">Search</button>
+
+    {% if search or department %}
+      <a href="{% url 'students_list' %}" class="btn btn-secondary">✕ Clear</a>
+    {% endif %}
+  </div>
+</form>
+
+<!-- ── Students Table ───────────────────────────────────────── -->
+{% if students %}
+<div class="table-wrapper">
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th data-sort="student_id">Student ID</th>
+        <th data-sort="name">Name</th>
+        <th>Department</th>
+        <th>Year</th>
+        <th>Phone</th>
+        <th>Status</th>
+        <th style="text-align:center;">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for student in students %}
+      <tr class="fade-in">
+        <td class="td-muted">
+          {{ forloop.counter|add:0 }}
+        </td>
+        <td>
+          <span class="td-mono" style="color:var(--accent-gold); font-weight:600;">
+            {{ student.student_id }}
+          </span>
+        </td>
+        <td>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <!-- Avatar with initials -->
+            <div style="
+              width:34px; height:34px;
+              border-radius:50%;
+              background: linear-gradient(135deg, #0f1724, #2563eb);
+              display:flex; align-items:center; justify-content:center;
+              font-size:0.75rem; font-weight:700; color:white;
+              flex-shrink:0;">
+              {{ student.name|first|upper }}
+            </div>
+            <div>
+              <div class="td-bold">{{ student.name }}</div>
+              <div class="td-muted" style="font-size:0.75rem;">{{ student.email }}</div>
+            </div>
+          </div>
+        </td>
+        <td>{{ student.department|default:"—" }}</td>
+        <td>{{ student.year|default:"—" }}</td>
+        <td class="td-mono" style="font-size:0.82rem;">
+          {{ student.phone|default:"—" }}
+        </td>
+        <td>
+          {% if student.active %}
+            <span class="badge badge-green">Active</span>
+          {% else %}
+            <span class="badge badge-gray">Inactive</span>
+          {% endif %}
+        </td>
+        <td>
+          <div class="btn-group" style="justify-content:center;">
+            <a href="{% url 'student_detail' student.id %}"
+               class="btn btn-secondary btn-sm" title="View Details">👁️</a>
+            <a href="{% url 'student_edit' student.id %}"
+               class="btn btn-secondary btn-sm" title="Edit">✏️</a>
+            <button class="btn btn-danger btn-sm"
+                  data-delete-url="{% url 'student_delete' student.id %}"
+                    data-delete-name="{{ student.name }}"
+                    title="Delete">🗑️</button>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- ── Pagination ──────────────────────────────────────────── -->
+{% if total_pages > 1 %}
+<div class="pagination">
+  {% if page > 1 %}
+    <a href="?page={{ page|add:"-1" }}&search={{ search }}&department={{ department }}"
+       class="page-btn">‹</a>
+  {% else %}
+    <span class="page-btn disabled">‹</span>
+  {% endif %}
+
+  {% for p in pages_range %}
+    <a href="?page={{ p }}&search={{ search }}&department={{ department }}"
+       class="page-btn {% if p == page %}active{% endif %}">{{ p }}</a>
+  {% endfor %}
+
+  {% if page < total_pages %}
+    <a href="?page={{ page|add:"1" }}&search={{ search }}&department={{ department }}"
+       class="page-btn">›</a>
+  {% else %}
+    <span class="page-btn disabled">›</span>
+  {% endif %}
+</div>
+{% endif %}
+
+{% else %}
+<div class="empty-state">
+  <div class="empty-state-icon">🎓</div>
+  <h3>No students found</h3>
+  <p>
+    {% if search or department %}
+      No results for your search. Try different keywords.
+    {% else %}
+      No students registered yet.
+    {% endif %}
+  </p>
+  {% if search or department %}
+    <a href="{% url 'students_list' %}" class="btn btn-secondary">Clear Filters</a>
+  {% else %}
+    <a href="{% url 'student_add' %}" class="btn btn-primary">+ Add First Student</a>
+  {% endif %}
+</div>
+{% endif %}
+
+{% endblock %}

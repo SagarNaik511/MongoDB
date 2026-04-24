@@ -1,0 +1,159 @@
+{% extends 'library/base.html' %}
+
+{% block title %}{{ book.title }}{% endblock %}
+{% block breadcrumb %}
+  <a href="{% url 'books_list' %}" style="color:var(--text-muted);">Books</a>
+  › {{ book.title|truncatechars:30 }}
+{% endblock %}
+
+{% block content %}
+
+<!-- ── Detail Header Card ───────────────────────────────────── -->
+<div class="detail-header-card">
+
+  <!-- Book Cover -->
+  <div class="detail-cover
+    {% if book.category == 'Fiction' %}cover-fiction
+    {% elif book.category == 'Technology' %}cover-technology
+    {% elif book.category == 'History' %}cover-history
+    {% else %}cover-default{% endif %}">
+    <span style="font-size:3rem; color:rgba(255,255,255,0.3); font-family:var(--font-display);">
+      {{ book.title|first|upper }}
+    </span>
+  </div>
+
+  <!-- Info -->
+  <div class="detail-info">
+    <h1 class="detail-title">{{ book.title }}</h1>
+    <p class="detail-sub">by <strong>{{ book.author }}</strong></p>
+
+    <!-- Status badge -->
+    {% if book.available_copies == 0 %}
+      <span class="badge badge-red" style="margin-bottom:16px;">❌ Not Available</span>
+    {% elif book.available_copies == 1 %}
+      <span class="badge badge-yellow" style="margin-bottom:16px;">⚠️ Last Copy</span>
+    {% else %}
+      <span class="badge badge-green" style="margin-bottom:16px;">✅ {{ book.available_copies }} Copies Available</span>
+    {% endif %}
+
+    <!-- Meta grid -->
+    <div class="detail-meta-grid">
+      <div class="detail-meta-item">
+        <div class="detail-meta-label">Category</div>
+        <div class="detail-meta-value">{{ book.category|default:"—" }}</div>
+      </div>
+      <div class="detail-meta-item">
+        <div class="detail-meta-label">Publisher</div>
+        <div class="detail-meta-value">{{ book.publisher|default:"—" }}</div>
+      </div>
+      <div class="detail-meta-item">
+        <div class="detail-meta-label">Year</div>
+        <div class="detail-meta-value">{{ book.year|default:"—" }}</div>
+      </div>
+      <div class="detail-meta-item">
+        <div class="detail-meta-label">ISBN</div>
+        <div class="detail-meta-value" style="font-family:var(--font-mono); font-size:0.8rem;">
+          {{ book.isbn|default:"—" }}
+        </div>
+      </div>
+      <div class="detail-meta-item">
+        <div class="detail-meta-label">Total Copies</div>
+        <div class="detail-meta-value">{{ book.total_copies }}</div>
+      </div>
+      <div class="detail-meta-item">
+        <div class="detail-meta-label">Available</div>
+        <div class="detail-meta-value" style="color:var(--accent-green); font-weight:700;">
+          {{ book.available_copies }}
+        </div>
+      </div>
+    </div>
+
+    {% if book.description %}
+    <p style="margin-top:16px; font-size:0.875rem; color:var(--text-secondary); line-height:1.7;">
+      {{ book.description }}
+    </p>
+    {% endif %}
+
+    <!-- Action buttons -->
+    <div class="btn-group" style="margin-top:20px;">
+      <a href="{% url 'book_edit' book.id %}"   class="btn btn-secondary">✏️ Edit Book</a>
+      <a href="{% url 'issue_book' %}"            class="btn btn-primary">📤 Issue This Book</a>
+      <button class="btn btn-danger"
+              data-delete-url="{% url 'book_delete' book.id %}"
+              data-delete-name="{{ book.title }}">
+        🗑️ Delete
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── Issue History Table ──────────────────────────────────── -->
+<div class="card">
+  <div class="card-header">
+    <span class="card-title">📋 Issue History</span>
+    <span style="font-size:0.78rem; color:var(--text-muted);">
+      Last {{ issue_history|length }} records
+    </span>
+  </div>
+
+  {% if issue_history %}
+  <div class="table-wrapper" style="border:none; border-radius:0;">
+    <table>
+      <thead>
+        <tr>
+          <th>Student</th>
+          <th>Student ID</th>
+          <th>Issued On</th>
+          <th>Due Date</th>
+          <th>Returned On</th>
+          <th>Status</th>
+          <th>Fine</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for issue in issue_history %}
+        <tr>
+          <td class="td-bold">{{ issue.student_name }}</td>
+          <td class="td-mono">{{ issue.student_code }}</td>
+          <td class="td-muted">{{ issue.issue_date|date:"d M Y" }}</td>
+          <td class="td-mono">{{ issue.due_date|date:"d M Y" }}</td>
+          <td class="td-muted">
+            {% if issue.return_date %}
+              {{ issue.return_date|date:"d M Y" }}
+            {% else %}
+              <span style="color:var(--text-muted);">—</span>
+            {% endif %}
+          </td>
+          <td>
+            {% if issue.status == 'returned' %}
+              <span class="badge badge-green">Returned</span>
+            {% else %}
+              <span class="badge badge-yellow">Active</span>
+            {% endif %}
+          </td>
+          <td>
+            {% if issue.fine > 0 %}
+              <span style="color:var(--accent-red); font-weight:600; font-family:var(--font-mono);">
+                ₹{{ issue.fine }}
+              </span>
+            {% else %}
+              <span class="td-muted">₹0</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state" style="padding:40px;">
+    <div class="empty-state-icon">📭</div>
+    <h3>No issue history</h3>
+    <p>This book has never been issued.</p>
+  </div>
+  {% endif %}
+
+</div>
+
+{% endblock %}

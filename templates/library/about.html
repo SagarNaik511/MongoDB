@@ -1,0 +1,161 @@
+{% extends 'library/base.html' %}
+
+{% block title %}About{% endblock %}
+{% block breadcrumb %}About{% endblock %}
+
+{% block content %}
+
+<!-- ── Hero ───────────────────────────────────────────────── -->
+<div class="about-hero">
+  <div style="font-size:3rem; margin-bottom:16px;">📚</div>
+  <h1>LibraryOS</h1>
+  <p style="margin-top:12px;">
+    A complete Library Management System built with Django and MongoDB.
+    Designed for college use — track books, students, issues and fines
+    with a clean, professional interface.
+  </p>
+  <div style="display:flex; gap:12px; justify-content:center; margin-top:24px; flex-wrap:wrap;">
+    <span class="badge badge-blue" style="padding:6px 14px; font-size:0.8rem;">Django 4.2</span>
+    <span class="badge badge-green" style="padding:6px 14px; font-size:0.8rem;">MongoDB</span>
+    <span class="badge badge-yellow" style="padding:6px 14px; font-size:0.8rem;">PyMongo</span>
+    <span class="badge badge-gray" style="padding:6px 14px; font-size:0.8rem;">Pure CSS</span>
+    <span class="badge badge-teal" style="padding:6px 14px; font-size:0.8rem;">Vanilla JS</span>
+  </div>
+</div>
+
+<!-- ── Tech Stack ─────────────────────────────────────────── -->
+<div class="card" style="margin-bottom:24px;">
+  <div class="card-header">
+    <span class="card-title">🛠️ Tech Stack</span>
+  </div>
+  <div class="card-body">
+    <div class="tech-grid">
+      <div class="tech-item">
+        <div class="tech-item-icon">🐍</div>
+        <div class="tech-item-name">Python 3</div>
+        <div class="tech-item-desc">Backend language</div>
+      </div>
+      <div class="tech-item">
+        <div class="tech-item-icon">🌿</div>
+        <div class="tech-item-name">Django 4.2</div>
+        <div class="tech-item-desc">Web framework</div>
+      </div>
+      <div class="tech-item">
+        <div class="tech-item-icon">🍃</div>
+        <div class="tech-item-name">MongoDB</div>
+        <div class="tech-item-desc">NoSQL database</div>
+      </div>
+      <div class="tech-item">
+        <div class="tech-item-icon">🔌</div>
+        <div class="tech-item-name">PyMongo</div>
+        <div class="tech-item-desc">Raw MongoDB driver</div>
+      </div>
+      <div class="tech-item">
+        <div class="tech-item-icon">🎨</div>
+        <div class="tech-item-name">Pure CSS</div>
+        <div class="tech-item-desc">Custom design system</div>
+      </div>
+      <div class="tech-item">
+        <div class="tech-item-icon">⚡</div>
+        <div class="tech-item-name">Vanilla JS</div>
+        <div class="tech-item-desc">No frameworks</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── MongoDB Operations Used ─────────────────────────────── -->
+<div class="card" style="margin-bottom:24px;">
+  <div class="card-header">
+    <span class="card-title">🗄️ MongoDB Operations Used</span>
+    <span style="font-size:0.75rem; color:var(--text-muted);">For viva reference</span>
+  </div>
+  <div class="card-body">
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:16px;">
+
+      <div>
+        <div style="font-weight:700; color:var(--accent-gold); margin-bottom:8px; font-size:0.85rem;">
+          📝 CRUD Operations
+        </div>
+        {% for op in crud_ops %}
+        <div style="display:flex; align-items:center; gap:8px; padding:5px 0;
+                    border-bottom:1px solid var(--border-color); font-size:0.82rem;">
+          <span style="color:var(--accent-green);">✓</span>
+          <span style="font-family:var(--font-mono); color:var(--text-primary);">{{ op }}</span>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div>
+        <div style="font-weight:700; color:var(--accent-gold); margin-bottom:8px; font-size:0.85rem;">
+          🔍 Comparison Operators
+        </div>
+        {% for op in comparison_ops %}
+        <div style="display:flex; align-items:center; gap:8px; padding:5px 0;
+                    border-bottom:1px solid var(--border-color); font-size:0.82rem;">
+          <span style="color:var(--accent-green);">✓</span>
+          <span style="font-family:var(--font-mono); color:var(--accent-blue);">{{ op }}</span>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div>
+        <div style="font-weight:700; color:var(--accent-gold); margin-bottom:8px; font-size:0.85rem;">
+          🧠 Logical Operators
+        </div>
+        {% for op in logical_ops %}
+        <div style="display:flex; align-items:center; gap:8px; padding:5px 0;
+                    border-bottom:1px solid var(--border-color); font-size:0.82rem;">
+          <span style="color:var(--accent-green);">✓</span>
+          <span style="font-family:var(--font-mono); color:var(--accent-teal);">{{ op }}</span>
+        </div>
+        {% endfor %}
+
+        <div style="font-weight:700; color:var(--accent-gold); margin:12px 0 8px; font-size:0.85rem;">
+          📊 Aggregation
+        </div>
+        {% for op in aggregation_ops %}
+        <div style="display:flex; align-items:center; gap:8px; padding:5px 0;
+                    border-bottom:1px solid var(--border-color); font-size:0.82rem;">
+          <span style="color:var(--accent-green);">✓</span>
+          <span style="font-family:var(--font-mono); color:var(--accent-orange);">{{ op }}</span>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div>
+        <div style="font-weight:700; color:var(--accent-gold); margin-bottom:8px; font-size:0.85rem;">
+          ⚙️ Utility
+        </div>
+        {% for op in utility_ops %}
+        <div style="display:flex; align-items:center; gap:8px; padding:5px 0;
+                    border-bottom:1px solid var(--border-color); font-size:0.82rem;">
+          <span style="color:var(--accent-green);">✓</span>
+          <span style="font-family:var(--font-mono); font-size:0.75rem; color:var(--text-primary);">{{ op }}</span>
+        </div>
+        {% endfor %}
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ── Features List ──────────────────────────────────────── -->
+<div class="card">
+  <div class="card-header">
+    <span class="card-title">✅ Features Implemented</span>
+  </div>
+  <div class="card-body">
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; font-size:0.875rem;">
+      {% for feat in features %}
+      <div style="display:flex; align-items:center; gap:8px; padding:6px 0;
+                  border-bottom:1px solid var(--border-color);">
+        <span style="color:var(--accent-green); font-size:0.9rem;">✅</span>
+        {{ feat }}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}

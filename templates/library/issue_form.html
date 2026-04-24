@@ -1,0 +1,400 @@
+{% extends 'library/base.html' %}
+
+{% block title %}Issue a Book{% endblock %}
+{% block breadcrumb %}
+  <a href="{% url 'issues_list' %}" style="color:var(--text-muted);">Issues</a>
+  › Issue Book
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+  <div>
+    <h1 class="page-title">📤 Issue a Book</h1>
+    <p class="page-subtitle">Select a book and a student to issue</p>
+  </div>
+  <a href="{% url 'issues_list' %}" class="btn btn-secondary">← Back to Issues</a>
+</div>
+
+<div style="display:grid; grid-template-columns:1.4fr 1fr; gap:24px; align-items:start;">
+
+  <!-- ── Main Issue Form ──────────────────────────────────── -->
+  <div class="card">
+    <div class="card-header">
+      <span class="card-title">📋 Issue Details</span>
+    </div>
+    <div class="card-body">
+      <form method="POST" action="{% url 'issue_book' %}" id="issueForm">
+        {% csrf_token %}
+
+        <!-- Hidden fields populated by autocomplete -->
+        <input type="hidden" name="book_id"    id="book_id">
+        <input type="hidden" name="student_id" id="student_id">
+
+        <!-- ── Book Search ──────────────────────────── -->
+        <div class="form-group" style="margin-bottom:20px;">
+          <label class="form-label">Search Book *</label>
+          <div class="autocomplete-wrapper">
+            <div class="search-bar" style="padding:10px 14px;">
+              <span class="search-icon">📚</span>
+              <input type="text"
+                     id="book-search-input"
+                     placeholder="Type book title or author…"
+                     autocomplete="off">
+            </div>
+            <div class="autocomplete-dropdown" id="bookDropdown"></div>
+          </div>
+          <span class="form-hint">
+            Only books with available copies are shown
+          </span>
+
+          <!-- Selected book preview -->
+          <div id="book-preview" style="display:none; margin-top:10px;">
+            <div class="card" style="padding:14px; border-color:var(--accent-gold);">
+              <div style="display:flex; gap:12px; align-items:center;">
+                <div style="
+                  width:42px; height:42px; border-radius:8px;
+                  background:linear-gradient(135deg,#0f1724,#2563eb);
+                  display:flex; align-items:center; justify-content:center;
+                  font-size:1.2rem;">📖</div>
+                <div>
+                  <div id="preview-book-title"
+                       style="font-weight:700; font-size:0.9rem;"></div>
+                  <div id="preview-book-meta"
+                       style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;"></div>
+                </div>
+                <button type="button"
+                        onclick="clearBook()"
+                        style="margin-left:auto; background:none; border:none;
+                               color:var(--text-muted); font-size:1.1rem; cursor:pointer;">
+                  ✕
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Student Search ───────────────────────── -->
+        <div class="form-group" style="margin-bottom:20px;">
+          <label class="form-label">Search Student *</label>
+          <div class="autocomplete-wrapper">
+            <div class="search-bar" style="padding:10px 14px;">
+              <span class="search-icon">🎓</span>
+              <input type="text"
+                     id="student-search-input"
+                     placeholder="Type student name or ID…"
+                     autocomplete="off">
+            </div>
+            <div class="autocomplete-dropdown" id="studentDropdown"></div>
+          </div>
+
+          <!-- Selected student preview -->
+          <div id="student-preview" style="display:none; margin-top:10px;">
+            <div class="card" style="padding:14px; border-color:var(--accent-gold);">
+              <div style="display:flex; gap:12px; align-items:center;">
+                <div style="
+                  width:42px; height:42px; border-radius:50%;
+                  background:linear-gradient(135deg,#0f1724,#2563eb);
+                  display:flex; align-items:center; justify-content:center;
+                  font-size:1rem; font-weight:700; color:white;"
+                  id="preview-student-avatar">A</div>
+                <div>
+                  <div id="preview-student-name"
+                       style="font-weight:700; font-size:0.9rem;"></div>
+                  <div id="preview-student-meta"
+                       style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;"></div>
+                </div>
+                <button type="button"
+                        onclick="clearStudent()"
+                        style="margin-left:auto; background:none; border:none;
+                               color:var(--text-muted); font-size:1.1rem; cursor:pointer;">
+                  ✕
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Issue Duration ───────────────────────── -->
+        <div class="form-group" style="margin-bottom:24px;">
+          <label class="form-label">Issue Duration (Days) *</label>
+          <div style="display:flex; align-items:center; gap:12px;">
+            <input type="range"
+                   id="days"
+                   name="days"
+                   min="1" max="30"
+                   value="14"
+                   style="flex:1; accent-color:var(--accent-gold);">
+            <span style="
+              font-family:var(--font-mono);
+              font-size:1.2rem;
+              font-weight:700;
+              color:var(--accent-gold);
+              min-width:50px;
+              text-align:center;"
+              id="days-display">14</span>
+          </div>
+          <div id="due-date-preview"
+               style="font-size:0.82rem; color:var(--accent-green);
+                      margin-top:6px; font-weight:500;">
+          </div>
+          <span class="form-hint">Fine is ₹5/day after the due date</span>
+        </div>
+
+        <!-- ── Submit ───────────────────────────────── -->
+        <button type="button"
+                onclick="submitIssueForm()"
+                class="btn btn-primary btn-lg w-full"
+                style="justify-content:center;">
+          📤 Issue Book
+        </button>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- ── Quick Reference Panel ────────────────────────────── -->
+  <div style="display:flex; flex-direction:column; gap:16px;">
+
+    <!-- Fine info -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">💰 Fine Policy</span>
+      </div>
+      <div class="card-body" style="font-size:0.875rem;">
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border-color);">
+            <span style="color:var(--text-muted);">Fine Rate</span>
+            <strong style="color:var(--accent-red);">₹5 / day</strong>
+          </div>
+          <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border-color);">
+            <span style="color:var(--text-muted);">Max Duration</span>
+            <strong>30 days</strong>
+          </div>
+          <div style="display:flex; justify-content:space-between; padding:8px 0;">
+            <span style="color:var(--text-muted);">Applied On</span>
+            <strong>Return</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- All books dropdown (fallback) -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">📚 Or Select from List</span>
+      </div>
+      <div class="card-body" style="font-size:0.875rem;">
+        <div class="form-group" style="margin-bottom:12px;">
+          <label class="form-label">Choose Book</label>
+          <select class="form-control" id="book-select-fallback"
+                  onchange="selectBookFromList(this)">
+            <option value="">-- Select a book --</option>
+            {% for book in books %}
+              <option value="{{ book.id }}"
+                      data-title="{{ book.title }}"
+                      data-author="{{ book.author }}"
+                      data-copies="{{ book.available_copies }}">
+                {{ book.title }} ({{ book.available_copies }} left)
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Choose Student</label>
+          <select class="form-control" id="student-select-fallback"
+                  onchange="selectStudentFromList(this)">
+            <option value="">-- Select a student --</option>
+            {% for student in students %}
+              <option value="{{ student.id }}"
+                      data-name="{{ student.name }}"
+                      data-sid="{{ student.student_id }}"
+                      data-dept="{{ student.department }}">
+                {{ student.name }} ({{ student.student_id }})
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tips -->
+    <div class="card" style="background:rgba(245,200,66,0.05); border-color:rgba(245,200,66,0.2);">
+      <div class="card-body" style="font-size:0.82rem;">
+        <div style="font-weight:700; color:var(--accent-gold); margin-bottom:8px;">
+          💡 Quick Tips
+        </div>
+        <ul style="color:var(--text-muted); line-height:1.8; list-style:disc; padding-left:16px;">
+          <li>Type at least 2 characters to search</li>
+          <li>Books with 0 copies won't appear</li>
+          <li>One book per student at a time</li>
+          <li>Slide to set due date (1–30 days)</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// ── Days slider → live display ────────────────────────────────
+const daysSlider  = document.getElementById('days');
+const daysDisplay = document.getElementById('days-display');
+
+daysSlider.addEventListener('input', () => {
+  daysDisplay.textContent = daysSlider.value;
+  updateDuePreview();
+});
+
+function updateDuePreview() {
+  const days = parseInt(daysSlider.value, 10);
+  const due  = new Date();
+  due.setDate(due.getDate() + days);
+  document.getElementById('due-date-preview').textContent =
+    '📅 Due on: ' + due.toLocaleDateString('en-IN',
+      { weekday:'short', day:'numeric', month:'short', year:'numeric' });
+}
+updateDuePreview();
+
+// ── Book autocomplete ─────────────────────────────────────────
+const bookInput      = document.getElementById('book-search-input');
+const bookDropdown   = document.getElementById('bookDropdown');
+const bookHidden     = document.getElementById('book_id');
+const bookPreview    = document.getElementById('book-preview');
+
+let bookDebounce;
+bookInput.addEventListener('input', () => {
+  clearTimeout(bookDebounce);
+  bookDebounce = setTimeout(() => searchBooks(), 250);
+});
+
+async function searchBooks() {
+  const q = bookInput.value.trim();
+  if (q.length < 2) { bookDropdown.classList.remove('show'); return; }
+  const res  = await fetch('/api/search-books/?q=' + encodeURIComponent(q));
+  const data = await res.json();
+  renderBookDropdown(data.results || []);
+}
+
+function renderBookDropdown(results) {
+  if (!results.length) { bookDropdown.classList.remove('show'); return; }
+  bookDropdown.innerHTML = results.map(r => `
+    <div class="autocomplete-item"
+         onclick="selectBook('${r.id}','${r.title}','${r.author}',${r.available_copies},'${r.category}')">
+      <div class="autocomplete-item-title">${r.title}</div>
+      <div class="autocomplete-item-sub">
+        ${r.author} · ${r.category} · <strong>${r.available_copies} copies</strong>
+      </div>
+    </div>
+  `).join('');
+  bookDropdown.classList.add('show');
+}
+
+function selectBook(id, title, author, copies, category) {
+  bookHidden.value   = id;
+  bookInput.value    = title;
+  bookDropdown.classList.remove('show');
+  bookPreview.style.display = 'block';
+  document.getElementById('preview-book-title').textContent = title;
+  document.getElementById('preview-book-meta').textContent  =
+    author + ' · ' + category + ' · ' + copies + ' copies available';
+}
+
+function clearBook() {
+  bookHidden.value = '';
+  bookInput.value  = '';
+  bookPreview.style.display = 'none';
+}
+
+// ── Student autocomplete ──────────────────────────────────────
+const studentInput    = document.getElementById('student-search-input');
+const studentDropdown = document.getElementById('studentDropdown');
+const studentHidden   = document.getElementById('student_id');
+const studentPreview  = document.getElementById('student-preview');
+
+let studentDebounce;
+studentInput.addEventListener('input', () => {
+  clearTimeout(studentDebounce);
+  studentDebounce = setTimeout(() => searchStudents(), 250);
+});
+
+async function searchStudents() {
+  const q = studentInput.value.trim();
+  if (q.length < 2) { studentDropdown.classList.remove('show'); return; }
+  const res  = await fetch('/api/search-students/?q=' + encodeURIComponent(q));
+  const data = await res.json();
+  renderStudentDropdown(data.results || []);
+}
+
+function renderStudentDropdown(results) {
+  if (!results.length) { studentDropdown.classList.remove('show'); return; }
+  studentDropdown.innerHTML = results.map(r => `
+    <div class="autocomplete-item"
+         onclick="selectStudent('${r.id}','${r.name}','${r.student_id}','${r.department}')">
+      <div class="autocomplete-item-title">${r.name}</div>
+      <div class="autocomplete-item-sub">${r.student_id} · ${r.department}</div>
+    </div>
+  `).join('');
+  studentDropdown.classList.add('show');
+}
+
+function selectStudent(id, name, sid, dept) {
+  studentHidden.value   = id;
+  studentInput.value    = name;
+  studentDropdown.classList.remove('show');
+  studentPreview.style.display = 'block';
+  document.getElementById('preview-student-name').textContent   = name;
+  document.getElementById('preview-student-meta').textContent   = sid + ' · ' + dept;
+  document.getElementById('preview-student-avatar').textContent = name[0].toUpperCase();
+}
+
+function clearStudent() {
+  studentHidden.value = '';
+  studentInput.value  = '';
+  studentPreview.style.display = 'none';
+}
+
+// ── Fallback dropdowns ────────────────────────────────────────
+function selectBookFromList(sel) {
+  const opt = sel.options[sel.selectedIndex];
+  if (!opt.value) return;
+  selectBook(opt.value, opt.dataset.title, opt.dataset.author,
+             opt.dataset.copies, '');
+}
+
+function selectStudentFromList(sel) {
+  const opt = sel.options[sel.selectedIndex];
+  if (!opt.value) return;
+  selectStudent(opt.value, opt.dataset.name, opt.dataset.sid, opt.dataset.dept);
+}
+
+// ── Form Validation before submit ────────────────────────────
+function submitIssueForm() {
+  const bookId    = document.getElementById('book_id').value;
+  const studentId = document.getElementById('student_id').value;
+
+  if (!bookId) {
+    Toast.show('Please select a book first!', 'warning');
+    return;
+  }
+  if (!studentId) {
+    Toast.show('Please select a student first!', 'warning');
+    return;
+  }
+  document.getElementById('issueForm').submit();
+}
+
+// Close dropdowns on outside click
+document.addEventListener('click', e => {
+  if (!bookInput.parentElement.contains(e.target))
+    bookDropdown.classList.remove('show');
+  if (!studentInput.parentElement.contains(e.target))
+    studentDropdown.classList.remove('show');
+});
+</script>
+{% endblock %}

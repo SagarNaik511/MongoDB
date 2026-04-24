@@ -1,0 +1,142 @@
+{% extends 'library/base.html' %}
+
+{% block title %}Contact{% endblock %}
+{% block breadcrumb %}Contact{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+  <div>
+    <h1 class="page-title">✉️ Contact Us</h1>
+    <p class="page-subtitle">Get in touch with the library team</p>
+  </div>
+</div>
+
+<div class="contact-grid">
+
+  <!-- ── Info Panel ─────────────────────────────────────── -->
+  <div class="contact-info-card">
+    <div style="font-size:2.5rem; margin-bottom:16px;">📚</div>
+    <h2>Library Office</h2>
+    <p style="margin-top:8px;">
+      We're here to help. Reach out for any queries about books,
+      memberships, fines or system support.
+    </p>
+
+    <div class="contact-detail">
+      <div class="contact-detail-icon">📍</div>
+      <div>
+        <div class="contact-detail-label">Address</div>
+        <div class="contact-detail-text">
+          Central Library Building,<br>
+          College Campus, Mysuru — 570006
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-detail">
+      <div class="contact-detail-icon">📞</div>
+      <div>
+        <div class="contact-detail-label">Phone</div>
+        <div class="contact-detail-text">+91 821 234 5678</div>
+      </div>
+    </div>
+
+    <div class="contact-detail">
+      <div class="contact-detail-icon">📧</div>
+      <div>
+        <div class="contact-detail-label">Email</div>
+        <div class="contact-detail-text">library@college.edu</div>
+      </div>
+    </div>
+
+    <div class="contact-detail">
+      <div class="contact-detail-icon">🕐</div>
+      <div>
+        <div class="contact-detail-label">Working Hours</div>
+        <div class="contact-detail-text">
+          Mon – Sat: 9:00 AM – 6:00 PM<br>
+          Sunday: Closed
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick links -->
+    <div style="margin-top:28px; padding-top:20px;
+                border-top:1px solid rgba(255,255,255,0.1);">
+      <div style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.08em;
+                  color:var(--accent-gold); font-weight:600; margin-bottom:12px;">
+        Quick Links
+      </div>
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <a href="{% url 'books_list' %}"
+           style="color:rgba(200,211,232,0.7); font-size:0.85rem; display:flex; gap:8px; align-items:center;">
+          → Browse Books
+        </a>
+        <a href="{% url 'issue_book' %}"
+           style="color:rgba(200,211,232,0.7); font-size:0.85rem; display:flex; gap:8px; align-items:center;">
+          → Issue a Book
+        </a>
+        <a href="{% url 'reports' %}"
+           style="color:rgba(200,211,232,0.7); font-size:0.85rem; display:flex; gap:8px; align-items:center;">
+          → View Reports
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Contact Form ───────────────────────────────────── -->
+  <div class="card">
+    <div class="card-header">
+      <span class="card-title">💬 Send a Message</span>
+    </div>
+    <div class="card-body">
+      <form method="POST" action="{% url 'contact' %}">
+        {% csrf_token %}
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Your Name *</label>
+            <input type="text" name="name" class="form-control"
+                   placeholder="e.g. Arjun Sharma" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Email Address *</label>
+            <input type="email" name="email" class="form-control"
+                   placeholder="you@college.edu" required>
+          </div>
+
+          <div class="form-group full-width">
+            <label class="form-label">Subject</label>
+            <select name="subject" class="form-control">
+              <option value="">-- Select Subject --</option>
+              <option>Book Inquiry</option>
+              <option>Fine Dispute</option>
+              <option>Membership Issue</option>
+              <option>System Support</option>
+              <option>General Query</option>
+            </select>
+          </div>
+
+          <div class="form-group full-width">
+            <label class="form-label">Message *</label>
+            <textarea name="message" class="form-control"
+                      placeholder="Write your message here…"
+                      rows="5" required></textarea>
+          </div>
+        </div>
+
+        <div class="form-actions" style="margin-top:20px;">
+          <button type="submit" class="btn btn-primary btn-lg">
+            📨 Send Message
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}
