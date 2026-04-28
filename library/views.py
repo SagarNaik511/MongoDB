@@ -472,7 +472,7 @@ def students_list(request):
     """
     students_col = get_students_collection()
 
-    search   = request.GET.get('search', '').strip()
+    search   = (request.GET.get('search') or request.GET.get('q') or '').strip()
     dept     = request.GET.get('department', '').strip()
     page     = int(request.GET.get('page', 1))
     per_page = 8

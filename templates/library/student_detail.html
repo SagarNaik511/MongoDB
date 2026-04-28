@@ -54,12 +54,12 @@
     </div>
 
     <div class="btn-group" style="margin-top:20px;">
-      <a href="{% url 'student_edit' student.id %}" class="btn btn-secondary">✏️ Edit</a>
-      <a href="{% url 'issue_book' %}"               class="btn btn-primary">📤 Issue Book</a>
+      <a href="{% url 'student_edit' student.id %}" class="btn btn-secondary">Edit</a>
+      <a href="{% url 'issue_book' %}"               class="btn btn-primary">Issue Book</a>
       <button class="btn btn-danger"
               data-delete-url="{% url 'student_delete' student.id %}"
               data-delete-name="{{ student.name }}">
-        🗑️ Delete
+        Delete
       </button>
     </div>
   </div>
@@ -92,7 +92,7 @@
 <!-- ── Issue History Table ──────────────────────────────────── -->
 <div class="card">
   <div class="card-header">
-    <span class="card-title">📋 Issue History</span>
+    <span class="card-title">Issue History</span>
     <span style="font-size:0.78rem; color:var(--text-muted);">
       {{ issue_history|length }} record{{ issue_history|length|pluralize }}
     </span>
@@ -160,7 +160,7 @@
   </div>
   {% else %}
   <div class="empty-state" style="padding:40px;">
-    <div class="empty-state-icon">📭</div>
+    <div class="empty-state-icon"></div>
     <h3>No issue history</h3>
     <p>This student has not borrowed any books yet.</p>
     <a href="{% url 'issue_book' %}" class="btn btn-primary">Issue a Book</a>

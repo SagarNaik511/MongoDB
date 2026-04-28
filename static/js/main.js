@@ -25,7 +25,7 @@ const ThemeManager = {
     }
 
     const icons = document.querySelectorAll('.theme-icon');
-    icons.forEach(i => { i.textContent = theme === 'dark' ? '☀️' : '🌙'; });
+    icons.forEach(i => { i.textContent = ''; });
     const labels = document.querySelectorAll('.theme-label');
     labels.forEach(l => { l.textContent = theme === 'dark' ? 'Light Mode' : 'Dark Mode'; });
   },
@@ -95,13 +95,13 @@ const Toast = {
   },
 
   show(message, type = 'info', duration = 4000) {
-    const icons = { success: '✅', error: '❌', warning: '⚠️', info: 'ℹ️' };
+    const icons = { success: '', error: '', warning: '', info: '' };
     const toast = document.createElement('div');
     toast.className = `toast ${type}`;
     toast.innerHTML = `
-      <span class="toast-icon">${icons[type] || 'ℹ️'}</span>
+      <span class="toast-icon"></span>
       <span class="toast-message">${message}</span>
-      <button class="toast-close" onclick="Toast.dismiss(this.parentElement)">✕</button>
+      <button class="toast-close" onclick="Toast.dismiss(this.parentElement)">×</button>
     `;
     this.container.appendChild(toast);
     setTimeout(() => this.dismiss(toast), duration);
@@ -136,7 +136,7 @@ const ConfirmDialog = {
     modal.id = 'confirmModal';
     modal.innerHTML = `
       <div class="modal-box">
-        <div class="modal-icon" id="confirmIcon">⚠️</div>
+        <div class="modal-icon" id="confirmIcon">!</div>
         <h3 class="modal-title" id="confirmTitle">Are you sure?</h3>
         <p class="modal-message" id="confirmMessage">This action cannot be undone.</p>
         <div class="modal-actions">
@@ -151,7 +151,7 @@ const ConfirmDialog = {
     modal.addEventListener('click', e => { if (e.target === modal) this.hide(); });
   },
 
-  show({ title = 'Are you sure?', message = 'This cannot be undone.', icon = '🗑️',
+  show({ title = 'Are you sure?', message = 'This cannot be undone.', icon = '!',
          okText = 'Delete', okClass = 'btn-danger', onConfirm }) {
     document.getElementById('confirmTitle').textContent   = title;
     document.getElementById('confirmMessage').textContent = message;
@@ -177,7 +177,7 @@ function initDeleteButtons() {
       ConfirmDialog.show({
         title:     'Delete ' + name + '?',
         message:   `Are you sure you want to delete "${name}"? This action is permanent.`,
-        icon:      '🗑️',
+        icon:      'DEL',
         okText:    'Yes, Delete',
         onConfirm: () => { window.location.href = url; }
       });
@@ -322,7 +322,7 @@ function initReturnButtons() {
       ConfirmDialog.show({
         title:     'Return Book?',
         message:   `Mark "${name}" as returned? Fine (if any) will be calculated automatically.`,
-        icon:      '📚',
+        icon:      'RTN',
         okText:    'Yes, Return',
         okClass:   'btn-success',
         onConfirm: () => { window.location.href = url; }
@@ -357,7 +357,7 @@ function initFineCalculator() {
     const today = new Date();
     if (today > due) {
       const days = Math.floor((today - due) / (1000 * 60 * 60 * 24));
-      fineDisplay.textContent = `⚠️ Already ${days} day(s) overdue — Fine: ₹${days * 5}`;
+      fineDisplay.textContent = `Already ${days} day(s) overdue. Fine: Rs.${days * 5}`;
       fineDisplay.style.color = 'var(--accent-red)';
     } else {
       fineDisplay.textContent = '';

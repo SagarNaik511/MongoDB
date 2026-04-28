@@ -29,11 +29,11 @@
 
     <!-- Status badge -->
     {% if book.available_copies == 0 %}
-      <span class="badge badge-red" style="margin-bottom:16px;">❌ Not Available</span>
+      <span class="badge badge-red" style="margin-bottom:16px;">Not Available</span>
     {% elif book.available_copies == 1 %}
-      <span class="badge badge-yellow" style="margin-bottom:16px;">⚠️ Last Copy</span>
+      <span class="badge badge-yellow" style="margin-bottom:16px;">Last Copy</span>
     {% else %}
-      <span class="badge badge-green" style="margin-bottom:16px;">✅ {{ book.available_copies }} Copies Available</span>
+      <span class="badge badge-green" style="margin-bottom:16px;">{{ book.available_copies }} Copies Available</span>
     {% endif %}
 
     <!-- Meta grid -->
@@ -76,12 +76,12 @@
 
     <!-- Action buttons -->
     <div class="btn-group" style="margin-top:20px;">
-      <a href="{% url 'book_edit' book.id %}"   class="btn btn-secondary">✏️ Edit Book</a>
-      <a href="{% url 'issue_book' %}"            class="btn btn-primary">📤 Issue This Book</a>
+      <a href="{% url 'book_edit' book.id %}"   class="btn btn-secondary">Edit Book</a>
+      <a href="{% url 'issue_book' %}"            class="btn btn-primary">Issue This Book</a>
       <button class="btn btn-danger"
               data-delete-url="{% url 'book_delete' book.id %}"
               data-delete-name="{{ book.title }}">
-        🗑️ Delete
+        Delete
       </button>
     </div>
   </div>
@@ -91,7 +91,7 @@
 <!-- ── Issue History Table ──────────────────────────────────── -->
 <div class="card">
   <div class="card-header">
-    <span class="card-title">📋 Issue History</span>
+    <span class="card-title">Issue History</span>
     <span style="font-size:0.78rem; color:var(--text-muted);">
       Last {{ issue_history|length }} records
     </span>
@@ -148,7 +148,7 @@
   </div>
   {% else %}
   <div class="empty-state" style="padding:40px;">
-    <div class="empty-state-icon">📭</div>
+    <div class="empty-state-icon"></div>
     <h3>No issue history</h3>
     <p>This book has never been issued.</p>
   </div>

@@ -35,9 +35,9 @@ try:
     )
     # Ping to verify connection
     client.admin.command('ping')
-    print("✅ MongoDB connected successfully!")
+    print("[OK] MongoDB connected successfully!")
 except Exception as e:
-    print(f"❌ MongoDB connection failed: {e}")
+    print(f"[ERROR] MongoDB connection failed: {e}")
     client = None
 
 # ─────────────────────────────────────────────
@@ -94,9 +94,9 @@ def initialize_indexes():
         db['issues'].create_index('issue_date')
         db['issues'].create_index('status')
 
-        print("✅ MongoDB indexes created successfully!")
+        print("[OK] MongoDB indexes created successfully!")
     except Exception as e:
-        print(f"⚠️  Index creation warning: {e}")
+        print(f"[WARN] Index creation warning: {e}")
 
 
 # ─────────────────────────────────────────────
@@ -213,7 +213,7 @@ def seed_sample_data():
         ]
         # insertMany() — bulk insert multiple documents
         db['books'].insert_many(sample_books)
-        print("✅ Sample books inserted (insertMany)")
+        print("[OK] Sample books inserted (insertMany)")
 
     # ── Seed Students (insertMany) ───────────
     if db['students'].count_documents({}) == 0:
@@ -276,4 +276,4 @@ def seed_sample_data():
         ]
         # insertMany() — bulk insert multiple documents
         db['students'].insert_many(sample_students)
-        print("✅ Sample students inserted (insertMany)")
+        print("[OK] Sample students inserted (insertMany)")

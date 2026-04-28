@@ -5,12 +5,17 @@
   <a href="{% url 'issues_list' %}" style="color:var(--text-muted);">Issues</a>
   › Issue Book
 {% endblock %}
+  <h1 class="page-title">Issue a Book</h1>
+  <span class="card-title">Issue Details</span>
+              <span class="search-icon"></span>
+                  font-size:1.2rem;"></div>
+              <span class="search-icon"></span>
 
 {% block content %}
 
 <div class="page-header">
   <div>
-    <h1 class="page-title">📤 Issue a Book</h1>
+    <h1 class="page-title">Issue a Book</h1>
     <p class="page-subtitle">Select a book and a student to issue</p>
   </div>
   <a href="{% url 'issues_list' %}" class="btn btn-secondary">← Back to Issues</a>
@@ -21,7 +26,7 @@
   <!-- ── Main Issue Form ──────────────────────────────────── -->
   <div class="card">
     <div class="card-header">
-      <span class="card-title">📋 Issue Details</span>
+      <span class="card-title">Issue Details</span>
     </div>
     <div class="card-body">
       <form method="POST" action="{% url 'issue_book' %}" id="issueForm">
@@ -36,7 +41,6 @@
           <label class="form-label">Search Book *</label>
           <div class="autocomplete-wrapper">
             <div class="search-bar" style="padding:10px 14px;">
-              <span class="search-icon">📚</span>
               <input type="text"
                      id="book-search-input"
                      placeholder="Type book title or author…"
@@ -56,7 +60,7 @@
                   width:42px; height:42px; border-radius:8px;
                   background:linear-gradient(135deg,#0f1724,#2563eb);
                   display:flex; align-items:center; justify-content:center;
-                  font-size:1.2rem;">📖</div>
+                  font-size:1.2rem;"></div>
                 <div>
                   <div id="preview-book-title"
                        style="font-weight:700; font-size:0.9rem;"></div>
@@ -67,8 +71,13 @@
                         onclick="clearBook()"
                         style="margin-left:auto; background:none; border:none;
                                color:var(--text-muted); font-size:1.1rem; cursor:pointer;">
-                  ✕
+                  font-size:1.1rem; cursor:pointer;">
+                  ×
                 </button>
+                        Issue Book
+                <span class="card-title">Fine Policy</span>
+                <span class="card-title">Or Select from List</span>
+                        Quick Tips
               </div>
             </div>
           </div>
@@ -79,7 +88,6 @@
           <label class="form-label">Search Student *</label>
           <div class="autocomplete-wrapper">
             <div class="search-bar" style="padding:10px 14px;">
-              <span class="search-icon">🎓</span>
               <input type="text"
                      id="student-search-input"
                      placeholder="Type student name or ID…"
@@ -108,7 +116,7 @@
                         onclick="clearStudent()"
                         style="margin-left:auto; background:none; border:none;
                                color:var(--text-muted); font-size:1.1rem; cursor:pointer;">
-                  ✕
+                  ×
                 </button>
               </div>
             </div>
@@ -146,7 +154,7 @@
                 onclick="submitIssueForm()"
                 class="btn btn-primary btn-lg w-full"
                 style="justify-content:center;">
-          📤 Issue Book
+          Issue Book
         </button>
 
       </form>
@@ -159,7 +167,7 @@
     <!-- Fine info -->
     <div class="card">
       <div class="card-header">
-        <span class="card-title">💰 Fine Policy</span>
+        <span class="card-title">Fine Policy</span>
       </div>
       <div class="card-body" style="font-size:0.875rem;">
         <div style="display:flex; flex-direction:column; gap:10px;">
@@ -182,7 +190,7 @@
     <!-- All books dropdown (fallback) -->
     <div class="card">
       <div class="card-header">
-        <span class="card-title">📚 Or Select from List</span>
+        <span class="card-title">Or Select from List</span>
       </div>
       <div class="card-body" style="font-size:0.875rem;">
         <div class="form-group" style="margin-bottom:12px;">
@@ -223,7 +231,7 @@
     <div class="card" style="background:rgba(245,200,66,0.05); border-color:rgba(245,200,66,0.2);">
       <div class="card-body" style="font-size:0.82rem;">
         <div style="font-weight:700; color:var(--accent-gold); margin-bottom:8px;">
-          💡 Quick Tips
+          Quick Tips
         </div>
         <ul style="color:var(--text-muted); line-height:1.8; list-style:disc; padding-left:16px;">
           <li>Type at least 2 characters to search</li>
@@ -256,7 +264,7 @@ function updateDuePreview() {
   const due  = new Date();
   due.setDate(due.getDate() + days);
   document.getElementById('due-date-preview').textContent =
-    '📅 Due on: ' + due.toLocaleDateString('en-IN',
+    'Due on: ' + due.toLocaleDateString('en-IN',
       { weekday:'short', day:'numeric', month:'short', year:'numeric' });
 }
 updateDuePreview();

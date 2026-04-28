@@ -16,4 +16,4 @@ class LibraryConfig(AppConfig):
             initialize_indexes()
             seed_sample_data()
         except Exception as e:
-            print(f"⚠️  Startup init warning: {e}")
+            print(f"[WARN] Startup init warning: {e}")

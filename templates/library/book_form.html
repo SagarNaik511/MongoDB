@@ -11,7 +11,7 @@
 <div class="page-header">
   <div>
     <h1 class="page-title">
-      {% if action == 'Add' %}➕ Add New Book{% else %}✏️ Edit Book{% endif %}
+      {% if action == 'Add' %}Add New Book{% else %}Edit Book{% endif %}
     </h1>
     <p class="page-subtitle">
       {% if action == 'Add' %}
@@ -27,7 +27,7 @@
 <!-- ── Form Card ────────────────────────────────────────────── -->
 <div class="card" style="max-width: 860px;">
   <div class="card-header">
-    <span class="card-title">📋 Book Information</span>
+    <span class="card-title">Book Information</span>
     <span style="font-size:0.78rem; color:var(--text-muted);">
       Fields marked * are required
     </span>
@@ -145,7 +145,7 @@
       <!-- Actions -->
       <div class="form-actions" style="margin-top:24px;">
         <button type="submit" class="btn btn-primary btn-lg">
-          {% if action == 'Add' %}✅ Add Book{% else %}💾 Save Changes{% endif %}
+          {% if action == 'Add' %}Add Book{% else %}Save Changes{% endif %}
         </button>
         <a href="{% url 'books_list' %}" class="btn btn-secondary btn-lg">
           Cancel

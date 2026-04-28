@@ -5,8 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LibraryOS — Smart Library Management</title>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
-  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%2314c784'/><text x='50' y='62' text-anchor='middle' font-family='Arial' font-size='44' font-weight='700' fill='white'>L</text></svg>">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}?v=pixel-20260428g">
 </head>
 <body>
 
@@ -15,13 +15,13 @@
   <!-- ── Nav ────────────────────────────────────────────── -->
   <nav class="home-nav">
     <div class="home-logo">
-      <div class="home-logo-icon">📚</div>
+      <div class="home-logo-icon logo-fun" aria-hidden="true">L</div>
       <span class="home-logo-name">LibraryOS</span>
     </div>
 
     <div style="display:flex; gap:12px; align-items:center;">
-      <button class="dark-toggle-btn" style="background:rgba(255,255,255,0.08); border-color:rgba(255,255,255,0.15); color:rgba(200,211,232,0.8);">
-        <span class="theme-icon">🌙</span>
+      <button class="dark-toggle-btn">
+        <span class="theme-icon"></span>
         <span class="theme-label">Dark Mode</span>
       </button>
       <a href="{% url 'dashboard' %}" class="btn-home-primary" style="padding:10px 22px; font-size:0.85rem;">
@@ -34,25 +34,25 @@
   <section class="home-hero">
 
     <div class="home-hero-tag">
-      📚 College Library Management System
+      Library Management System
     </div>
 
-    <h1>
-      Manage Your Library<br>
-      with <em>Intelligence</em>
+    <h1 class="hero-title-strong">
+      Run Your Library<br>
+      with <em>Clarity</em>
     </h1>
 
-    <p>
-      A complete digital library system built with Django and MongoDB.
-      Track books, manage students, issue and return books — all in one place.
+    <p class="hero-copy-strong">
+      A clean console for books, students, and issues.
+      Search fast, track availability, and keep fines organized.
     </p>
 
     <div class="home-cta-group">
       <a href="{% url 'dashboard' %}" class="btn-home-primary">
-        📊 Open Dashboard
+        Open Dashboard
       </a>
       <a href="{% url 'books_list' %}" class="btn-home-secondary">
-        📖 Browse Books
+        Browse Books
       </a>
     </div>
 
@@ -62,37 +62,37 @@
   <section class="home-features">
 
     <div class="feature-card">
-      <div class="feature-card-icon">📖</div>
+      <div class="feature-card-icon"></div>
       <h3>Books Management</h3>
       <p>Add, edit, search books. Track available copies, categories, and authors.</p>
     </div>
 
     <div class="feature-card">
-      <div class="feature-card-icon">🎓</div>
+      <div class="feature-card-icon"></div>
       <h3>Student Records</h3>
       <p>Manage student profiles with department, year, and full issue history.</p>
     </div>
 
     <div class="feature-card">
-      <div class="feature-card-icon">🔄</div>
+      <div class="feature-card-icon"></div>
       <h3>Issue & Return</h3>
       <p>Issue books with due dates. Auto-calculate fines on late returns.</p>
     </div>
 
     <div class="feature-card">
-      <div class="feature-card-icon">📈</div>
+      <div class="feature-card-icon"></div>
       <h3>Reports & Analytics</h3>
       <p>Top books, fine reports, monthly stats, and activity graphs.</p>
     </div>
 
     <div class="feature-card">
-      <div class="feature-card-icon">🗄️</div>
+      <div class="feature-card-icon"></div>
       <h3>MongoDB Backend</h3>
       <p>Powered by raw PyMongo with indexes, regex search, aggregations.</p>
     </div>
 
     <div class="feature-card">
-      <div class="feature-card-icon">🌙</div>
+      <div class="feature-card-icon">✧</div>
       <h3>Dark Mode</h3>
       <p>Fully responsive with dark mode support across all pages.</p>
     </div>

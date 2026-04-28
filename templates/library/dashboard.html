@@ -15,7 +15,7 @@
   <div class="btn-group">
     <a href="{% url 'book_add' %}"    class="btn btn-secondary">+ Add Book</a>
     <a href="{% url 'student_add' %}" class="btn btn-secondary">+ Add Student</a>
-    <a href="{% url 'issue_book' %}"  class="btn btn-primary">📤 Issue Book</a>
+    <a href="{% url 'issue_book' %}"  class="btn btn-primary">Issue Book</a>
   </div>
 </div>
 
@@ -23,7 +23,7 @@
 <div class="stats-grid">
 
   <div class="stat-card gold fade-in">
-    <div class="stat-icon gold">📚</div>
+    <div class="stat-icon gold">BK</div>
     <div class="stat-body">
       <div class="stat-number" data-count="{{ total_books }}">{{ total_books }}</div>
       <div class="stat-label">Total Books</div>
@@ -31,7 +31,7 @@
   </div>
 
   <div class="stat-card blue fade-in">
-    <div class="stat-icon blue">🎓</div>
+    <div class="stat-icon blue">ST</div>
     <div class="stat-body">
       <div class="stat-number" data-count="{{ total_students }}">{{ total_students }}</div>
       <div class="stat-label">Total Students</div>
@@ -39,7 +39,7 @@
   </div>
 
   <div class="stat-card teal fade-in">
-    <div class="stat-icon teal">🔄</div>
+    <div class="stat-icon teal">IS</div>
     <div class="stat-body">
       <div class="stat-number" data-count="{{ issued_books }}">{{ issued_books }}</div>
       <div class="stat-label">Books Issued</div>
@@ -47,7 +47,7 @@
   </div>
 
   <div class="stat-card green fade-in">
-    <div class="stat-icon green">✅</div>
+    <div class="stat-icon green">RT</div>
     <div class="stat-body">
       <div class="stat-number" data-count="{{ returned_books }}">{{ returned_books }}</div>
       <div class="stat-label">Returned</div>
@@ -55,7 +55,7 @@
   </div>
 
   <div class="stat-card red fade-in">
-    <div class="stat-icon red">⚠️</div>
+    <div class="stat-icon red">OD</div>
     <div class="stat-body">
       <div class="stat-number" data-count="{{ overdue }}">{{ overdue }}</div>
       <div class="stat-label">Overdue</div>
@@ -63,7 +63,7 @@
   </div>
 
   <div class="stat-card orange fade-in">
-    <div class="stat-icon orange">💰</div>
+    <div class="stat-icon orange">FN</div>
     <div class="stat-body">
       <div class="stat-number" data-count="{{ pending_fines }}">{{ pending_fines }}</div>
       <div class="stat-label">Pending Fines</div>
@@ -78,7 +78,7 @@
   <!-- Monthly Issues Chart -->
   <div class="card fade-in">
     <div class="card-header">
-      <span class="card-title">📈 Monthly Issues</span>
+      <span class="card-title">Monthly Issues</span>
       <span style="font-size:0.75rem; color:var(--text-muted);">Last 6 months</span>
     </div>
     <div class="card-body">
@@ -91,7 +91,7 @@
   <!-- Category Pie Chart -->
   <div class="card fade-in">
     <div class="card-header">
-      <span class="card-title">📂 Books by Category</span>
+      <span class="card-title">Books by Category</span>
     </div>
     <div class="card-body">
       <div class="chart-wrapper">
@@ -105,7 +105,7 @@
 <!-- ── Recent Issues Table ──────────────────────────────────── -->
 <div class="card fade-in">
   <div class="card-header">
-    <span class="card-title">🕒 Recent Active Issues</span>
+    <span class="card-title">Recent Active Issues</span>
     <a href="{% url 'issues_list' %}" class="btn btn-secondary btn-sm">View All</a>
   </div>
 
@@ -159,7 +159,7 @@
   </div>
   {% else %}
   <div class="empty-state">
-    <div class="empty-state-icon">✅</div>
+    <div class="empty-state-icon">OK</div>
     <h3>All Clear!</h3>
     <p>No active issues right now.</p>
     <a href="{% url 'issue_book' %}" class="btn btn-primary">Issue a Book</a>

@@ -8,10 +8,10 @@
 <!-- ── Page Header ─────────────────────────────────────────── -->
 <div class="page-header">
   <div>
-    <h1 class="page-title">🔄 Issue / Return</h1>
+    <h1 class="page-title">Issue / Return</h1>
     <p class="page-subtitle">Track all book transactions, due dates and fines</p>
   </div>
-  <a href="{% url 'issue_book' %}" class="btn btn-primary">📤 Issue New Book</a>
+  <a href="{% url 'issue_book' %}" class="btn btn-primary">Issue New Book</a>
 </div>
 
 <!-- ── Tab Filters ──────────────────────────────────────────── -->
@@ -31,14 +31,14 @@
   <a href="?status=overdue"
      class="tab-btn {% if status_filter == 'overdue' %}active{% endif %}"
      style="{% if overdue_count > 0 %}color:var(--accent-red);{% endif %}">
-    ⚠️ Overdue
+    Overdue
     <span class="tab-count" style="{% if overdue_count > 0 %}background:var(--accent-red);color:white;{% endif %}">
       {{ overdue_count }}
     </span>
   </a>
   <a href="?status=returned"
      class="tab-btn {% if status_filter == 'returned' %}active{% endif %}">
-    ✅ Returned
+    Returned
     <span class="tab-count">{{ returned_count }}</span>
   </a>
 </div>
@@ -112,11 +112,11 @@
         <!-- Status -->
         <td>
           {% if issue.status == 'returned' %}
-            <span class="badge badge-green">✅ Returned</span>
+              <span class="badge badge-green">Returned</span>
           {% elif issue.is_overdue %}
-            <span class="badge badge-red">⚠️ Overdue</span>
+              <span class="badge badge-red">Overdue</span>
           {% else %}
-            <span class="badge badge-blue">📖 Active</span>
+              <span class="badge badge-blue">Active</span>
           {% endif %}
         </td>
 
@@ -144,7 +144,7 @@
             <button class="btn btn-success btn-sm"
                     data-return-url="{% url 'return_book' issue.id %}"
                     data-book-name="{{ issue.book_title }}">
-              ↩️ Return
+              Return
             </button>
           {% else %}
             <span style="font-size:0.78rem; color:var(--text-muted);">
@@ -186,9 +186,9 @@
 {% else %}
 <div class="empty-state">
   <div class="empty-state-icon">
-    {% if status_filter == 'overdue' %}⏰
-    {% elif status_filter == 'returned' %}✅
-    {% else %}📭{% endif %}
+    {% if status_filter == 'overdue' %}
+    {% elif status_filter == 'returned' %}
+    {% else %}{% endif %}
   </div>
   <h3>
     {% if status_filter == 'overdue' %}No overdue books — all clear!
@@ -201,7 +201,7 @@
     {% endif %}
   </p>
   {% if not status_filter %}
-    <a href="{% url 'issue_book' %}" class="btn btn-primary">📤 Issue First Book</a>
+    <a href="{% url 'issue_book' %}" class="btn btn-primary">Issue First Book</a>
   {% endif %}
 </div>
 {% endif %}

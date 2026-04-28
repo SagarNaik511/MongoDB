@@ -5,8 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}Library MS{% endblock %} — LibraryOS</title>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
-  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%2314c784'/><text x='50' y='62' text-anchor='middle' font-family='Arial' font-size='44' font-weight='700' fill='white'>L</text></svg>">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}?v=pixel-20260428g">
   {% block extra_css %}{% endblock %}
 </head>
 <body>
@@ -36,7 +36,7 @@
 
     <!-- Logo -->
     <div class="sidebar-logo">
-      <div class="sidebar-logo-icon">📚</div>
+      <div class="sidebar-logo-icon logo-fun" aria-hidden="true">L</div>
       <div class="sidebar-logo-text">
         LibraryOS
         <span>Management System</span>
@@ -50,12 +50,10 @@
       <div class="nav-section-label">Main</div>
 
       <a href="{% url 'home' %}" class="nav-item">
-        <span class="nav-icon">🏠</span>
         <span>Home</span>
       </a>
 
       <a href="{% url 'dashboard' %}" class="nav-item">
-        <span class="nav-icon">📊</span>
         <span>Dashboard</span>
       </a>
 
@@ -63,22 +61,18 @@
       <div class="nav-section-label">Library</div>
 
       <a href="{% url 'books_list' %}" class="nav-item">
-        <span class="nav-icon">📖</span>
         <span>Books</span>
       </a>
 
       <a href="{% url 'students_list' %}" class="nav-item">
-        <span class="nav-icon">🎓</span>
         <span>Students</span>
       </a>
 
       <a href="{% url 'issues_list' %}" class="nav-item">
-        <span class="nav-icon">🔄</span>
         <span>Issue / Return</span>
       </a>
 
       <a href="{% url 'issue_book' %}" class="nav-item">
-        <span class="nav-icon">➕</span>
         <span>Issue a Book</span>
       </a>
 
@@ -86,7 +80,6 @@
       <div class="nav-section-label">Reports</div>
 
       <a href="{% url 'reports' %}" class="nav-item">
-        <span class="nav-icon">📈</span>
         <span>Reports</span>
       </a>
 
@@ -94,12 +87,10 @@
       <div class="nav-section-label">Info</div>
 
       <a href="{% url 'about' %}" class="nav-item">
-        <span class="nav-icon">ℹ️</span>
         <span>About</span>
       </a>
 
       <a href="{% url 'contact' %}" class="nav-item">
-        <span class="nav-icon">✉️</span>
         <span>Contact</span>
       </a>
 
@@ -108,7 +99,6 @@
     <!-- Footer: Dark Mode Toggle -->
     <div class="sidebar-footer">
       <button class="dark-toggle-btn w-full">
-        <span class="theme-icon">🌙</span>
         <span class="theme-label">Dark Mode</span>
       </button>
     </div>
@@ -134,12 +124,6 @@
 
       <!-- Right side -->
       <div class="header-right">
-        <!-- Global quick search -->
-        <div class="header-search">
-          <span class="search-icon">🔍</span>
-          <input type="text" placeholder="Quick search..." id="globalSearch"
-                 autocomplete="off">
-        </div>
         <!-- Date display -->
         <span class="header-date"></span>
       </div>

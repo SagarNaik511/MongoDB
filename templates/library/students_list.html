@@ -8,7 +8,7 @@
 <!-- ── Page Header ─────────────────────────────────────────── -->
 <div class="page-header">
   <div>
-    <h1 class="page-title">🎓 Students</h1>
+    <h1 class="page-title">Students</h1>
     <p class="page-subtitle">
       {{ total_students }} student{{ total_students|pluralize }} registered
     </p>
@@ -21,7 +21,6 @@
   <div class="filter-bar">
 
     <div class="search-bar" style="flex:1; min-width:220px;">
-      <span class="search-icon">🔍</span>
       <input type="text"
              name="search"
              value="{{ search }}"
@@ -42,7 +41,7 @@
     <button type="submit" class="btn btn-secondary">Search</button>
 
     {% if search or department %}
-      <a href="{% url 'students_list' %}" class="btn btn-secondary">✕ Clear</a>
+      <a href="{% url 'students_list' %}" class="btn btn-secondary">Clear</a>
     {% endif %}
   </div>
 </form>
@@ -107,13 +106,13 @@
         <td>
           <div class="btn-group" style="justify-content:center;">
             <a href="{% url 'student_detail' student.id %}"
-               class="btn btn-secondary btn-sm" title="View Details">👁️</a>
+              class="btn btn-secondary btn-sm" title="View Details">View</a>
             <a href="{% url 'student_edit' student.id %}"
-               class="btn btn-secondary btn-sm" title="Edit">✏️</a>
+               class="btn btn-secondary btn-sm" title="Edit">Edit</a>
             <button class="btn btn-danger btn-sm"
                   data-delete-url="{% url 'student_delete' student.id %}"
                     data-delete-name="{{ student.name }}"
-                    title="Delete">🗑️</button>
+                    title="Delete">Delete</button>
           </div>
         </td>
       </tr>
@@ -148,7 +147,7 @@
 
 {% else %}
 <div class="empty-state">
-  <div class="empty-state-icon">🎓</div>
+  <div class="empty-state-icon"></div>
   <h3>No students found</h3>
   <p>
     {% if search or department %}
