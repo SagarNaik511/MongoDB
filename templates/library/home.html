@@ -4,9 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LibraryOS — Smart Library Management</title>
+  <title>LibraryOS — Smart Library Management TEST</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%2314c784'/><text x='50' y='62' text-anchor='middle' font-family='Arial' font-size='44' font-weight='700' fill='white'>L</text></svg>">
-  <link rel="stylesheet" href="{% static 'css/style.css' %}?v=pixel-20260428h">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}?v=pixel-20260428g">
 </head>
 <body>
 
@@ -18,7 +18,12 @@
       <div class="home-logo-icon logo-fun" aria-hidden="true">L</div>
       <span class="home-logo-name">LibraryOS</span>
     </div>
+
     <div style="display:flex; gap:12px; align-items:center;">
+      <button class="dark-toggle-btn">
+        <span class="theme-icon"></span>
+        <span class="theme-label">Dark Mode</span>
+      </button>
       <a href="{% url 'dashboard' %}" class="btn-home-primary" style="padding:10px 22px; font-size:0.85rem;">
         Go to Dashboard →
       </a>
@@ -79,11 +84,6 @@
     <div class="feature-card">
       <h3>MongoDB Backend</h3>
       <p>Powered by raw PyMongo with indexes, regex search, aggregations.</p>
-    </div>
-
-    <div class="feature-card">
-      <h3>Dark Mode</h3>
-      <p>Fully responsive with dark mode support across all pages.</p>
     </div>
 
   </section>
