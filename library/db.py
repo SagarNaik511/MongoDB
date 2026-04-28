@@ -25,12 +25,11 @@ from datetime import datetime
 
 # ─────────────────────────────────────────────
 # CONNECT TO MONGODB
-# pymongo.MongoClient connects to local MongoDB
+# MONGODB_URI can point to local MongoDB or MongoDB Atlas.
 # ─────────────────────────────────────────────
 try:
     client = pymongo.MongoClient(
-        host=settings.MONGODB_HOST,
-        port=settings.MONGODB_PORT,
+        settings.MONGODB_URI,
         serverSelectionTimeoutMS=5000  # 5 second timeout
     )
     # Ping to verify connection
