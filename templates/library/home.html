@@ -4,97 +4,129 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LibraryOS — Smart Library Management TEST</title>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%2314c784'/><text x='50' y='62' text-anchor='middle' font-family='Arial' font-size='44' font-weight='700' fill='white'>L</text></svg>">
-  <link rel="stylesheet" href="{% static 'css/style.css' %}?v=pixel-20260428g">
+  <title>LibraryOS - Library Management System</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230f766e'/><text x='50' y='62' text-anchor='middle' font-family='Arial' font-size='44' font-weight='700' fill='white'>L</text></svg>">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}?v=clean-library-ui-20260429">
 </head>
 <body>
 
-<div class="home-page">
+<div class="home-page library-home">
 
-  <!-- ── Nav ────────────────────────────────────────────── -->
-  <nav class="home-nav">
-    <div class="home-logo">
-      <div class="home-logo-icon logo-fun" aria-hidden="true">L</div>
+  <nav class="home-nav library-home-nav">
+    <a href="{% url 'home' %}" class="home-logo" aria-label="LibraryOS home">
+      <div class="home-logo-icon library-logo-icon" aria-hidden="true">L</div>
       <span class="home-logo-name">LibraryOS</span>
-    </div>
+    </a>
 
-    <div style="display:flex; gap:12px; align-items:center;">
-      <button class="dark-toggle-btn">
-        <span class="theme-icon"></span>
+    <div class="library-home-actions">
+      <button class="dark-toggle-btn" type="button">
         <span class="theme-label">Dark Mode</span>
       </button>
-      <a href="{% url 'dashboard' %}" class="btn-home-primary" style="padding:10px 22px; font-size:0.85rem;">
-        Go to Dashboard →
+      <a href="{% url 'dashboard' %}" class="btn-home-primary compact-btn">
+        Dashboard
       </a>
     </div>
   </nav>
 
-  <!-- ── Hero ───────────────────────────────────────────── -->
-  <section class="home-hero">
+  <main>
+    <section class="home-hero library-hero">
+      <div class="library-hero-copy">
+        <div class="home-hero-tag">Library Management System</div>
 
-    <div class="home-hero-tag">
-      Library Management System
-    </div>
+        <h1 class="hero-title-strong">
+          Manage books, students, and returns in one place.
+        </h1>
 
-    <h1 class="hero-title-strong">
-      Run Your Library<br>
-      with <em>Clarity</em>
-    </h1>
+        <p class="hero-copy-strong">
+          A focused system for catalog records, student borrowing, issue dates,
+          returns, overdue tracking, fines, and useful reports.
+        </p>
 
-    <p class="hero-copy-strong">
-      A clean console for books, students, and issues.
-      Search fast, track availability, and keep fines organized.
-    </p>
+        <div class="home-cta-group">
+          <a href="{% url 'dashboard' %}" class="btn-home-primary">Open Dashboard</a>
+          <a href="{% url 'issue_book' %}" class="btn-home-secondary">Issue Book</a>
+        </div>
+      </div>
 
-    <div class="home-cta-group">
-      <a href="{% url 'dashboard' %}" class="btn-home-primary">
-        Open Dashboard
+      <div class="library-hero-panel" aria-label="Library system overview">
+        <div class="library-card-header">
+          <span>Today at the Library</span>
+          <strong>Circulation Desk</strong>
+        </div>
+        <div class="library-stack">
+          <div class="library-stack-row">
+            <span class="stack-mark books-mark"></span>
+            <div>
+              <strong>Catalog</strong>
+              <small>Add, edit, search, and organize books</small>
+            </div>
+          </div>
+          <div class="library-stack-row">
+            <span class="stack-mark students-mark"></span>
+            <div>
+              <strong>Students</strong>
+              <small>Maintain student profiles and borrowing history</small>
+            </div>
+          </div>
+          <div class="library-stack-row">
+            <span class="stack-mark issue-mark"></span>
+            <div>
+              <strong>Issue / Return</strong>
+              <small>Track due dates, availability, and fines</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="library-quick-links" aria-label="Quick library actions">
+      <a href="{% url 'books_list' %}" class="library-link-card">
+        <span class="link-icon book-icon"></span>
+        <strong>Books Catalog</strong>
+        <small>Search books, check available copies, add new records.</small>
       </a>
-      <a href="{% url 'books_list' %}" class="btn-home-secondary">
-        Browse Books
+      <a href="{% url 'students_list' %}" class="library-link-card">
+        <span class="link-icon student-icon"></span>
+        <strong>Student Records</strong>
+        <small>Manage members, departments, and active status.</small>
       </a>
-    </div>
+      <a href="{% url 'issues_list' %}" class="library-link-card">
+        <span class="link-icon return-icon"></span>
+        <strong>Issue and Return</strong>
+        <small>View active issues, overdue books, and returned items.</small>
+      </a>
+      <a href="{% url 'reports' %}" class="library-link-card">
+        <span class="link-icon report-icon"></span>
+        <strong>Reports</strong>
+        <small>Review most issued books, fines, and monthly activity.</small>
+      </a>
+    </section>
 
-  </section>
+    <section class="home-features library-feature-band">
+      <div class="feature-card">
+        <h3>Book Inventory</h3>
+        <p>Keep title, author, ISBN, category, publisher, year, total copies, and available copies organized.</p>
+      </div>
 
-  <!-- ── Features ────────────────────────────────────────── -->
-  <section class="home-features">
+      <div class="feature-card">
+        <h3>Student Borrowing</h3>
+        <p>Connect every issue record to a student so the librarian can check responsibility quickly.</p>
+      </div>
 
-    <div class="feature-card">
-      <h3>Books Management</h3>
-      <p>Add, edit, search books. Track available copies, categories, and authors.</p>
-    </div>
+      <div class="feature-card">
+        <h3>Due Date Control</h3>
+        <p>Issue books for a fixed period, identify overdue records, and calculate late return fines.</p>
+      </div>
 
-    <div class="feature-card">
-      <h3>Student Records</h3>
-      <p>Manage student profiles with department, year, and full issue history.</p>
-    </div>
-
-    <div class="feature-card">
-      <h3>Issue & Return</h3>
-      <p>Issue books with due dates. Auto-calculate fines on late returns.</p>
-    </div>
-
-    <div class="feature-card">
-      <h3>Reports & Analytics</h3>
-      <p>Top books, fine reports, monthly stats, and activity graphs.</p>
-    </div>
-
-    <div class="feature-card">
-      <h3>MongoDB Backend</h3>
-      <p>Powered by raw PyMongo with indexes, regex search, aggregations.</p>
-    </div>
-
-  </section>
+      <div class="feature-card">
+        <h3>MongoDB Queries</h3>
+        <p>Use find, insert, update, delete, search filters, pagination, and aggregation reports in one project.</p>
+      </div>
+    </section>
+  </main>
 
 </div>
 
 <script src="{% static 'js/main.js' %}"></script>
 </body>
 </html>
-
-
-
-
-
