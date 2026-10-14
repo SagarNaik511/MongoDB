@@ -20,6 +20,7 @@ MongoDB Operations used in this project:
 """
 
 import pymongo
+import certifi
 from django.conf import settings
 from datetime import datetime
 
@@ -28,10 +29,13 @@ from datetime import datetime
 # MONGODB_URI can point to local MongoDB or MongoDB Atlas.
 # ─────────────────────────────────────────────
 try:
-    client = pymongo.MongoClient(
-        settings.MONGODB_URI,
-        serverSelectionTimeoutMS=5000  # 5 second timeout
-    )
+    client_options = {
+        'serverSelectionTimeoutMS': 5000  # 5 second timeout
+    }
+    if settings.MONGODB_URI.startswith('mongodb+srv://'):
+        client_options['tlsCAFile'] = certifi.where()
+
+    client = pymongo.MongoClient(settings.MONGODB_URI, **client_options)
     # Ping to verify connection
     client.admin.command('ping')
     print("[OK] MongoDB connected successfully!")
